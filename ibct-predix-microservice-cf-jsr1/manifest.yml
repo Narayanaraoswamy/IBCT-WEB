@@ -1,0 +1,5 @@
+applications:
+  - name: ibct-service4
+    buildpack: https://github.com/cloudfoundry/java-buildpack.git
+    path: target/ibct-service.jar
+    memory: 512M    
