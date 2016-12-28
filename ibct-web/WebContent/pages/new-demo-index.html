@@ -1,0 +1,449 @@
+<html lang="en"><head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>ibct</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../css/ge-custom.css" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <link href="../vendor/morrisjs/morris.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+<style>
+.fa-fw {
+    width: auto;
+    text-align: center;
+}
+.navbar-left li > a {
+    color: #3a5dae;
+}
+ a{
+    color: white;
+}
+.navbar-left>li>a:focus, .navbar-left>li>a:hover {
+    /* text-decoration: none;
+        color: #1e3d5c; */
+}
+
+a:focus, a:hover {
+    /* color: #fff;
+    text-decoration: none; */
+}
+
+.sidebar ul li {
+   /* border-bottom: none;
+    background: #1e3d5c;
+   border-top: 1px solid #fff;
+    margin-left: 4%;
+    width: 89%;*/
+}
+.navbar-default .navbar-brand {
+    color: #3a5dae;
+}
+.navbar-default {
+	    border-color: transparent;
+}
+	.sidebar {
+    z-index: 1;
+    position: absolute;
+    width: 250px;
+    margin-top: 0px;
+	    border-right: 1px solid #3a5dae;
+}
+.page-header {
+    padding-bottom: 9px;
+    margin: 0px 0 20px;
+   /* border-bottom: 1px solid #eee;*/
+    /*background-color:  #3a5dae;*/
+	background-color: rgb(47, 156, 228);
+    color: white;
+    text-align: center;font-size: 24px;
+}
+.nav>li>a:focus, .nav>li>a:hover {
+    text-decoration: none;
+        background-color: #fff;
+	 color: #1e3d5c;
+}
+.tableColor tr,.tableColor td{
+    /* width: 100%; */
+    border: 1px solid #333;
+    border-collapse: inherit;
+    background-color: rgba(146, 192, 239, 0.07);
+	}
+	table{width: 100%;	}
+	tr,td{    padding: 12px;}
+	.collapse {
+    list-style: none;
+    line-height: 36px;
+}
+	.collapse li {
+    padding: 6px;
+     border-top: 0px !important;
+}
+.navbar-brand {
+    padding-left: 127px;
+}
+.dropdown-menu .sub-menu {
+    left: 100%;
+    position: absolute;
+    top: 0;
+    visibility: hidden;
+    margin-top: -1px;
+}
+.dropdown-menu li:hover .sub-menu {
+    visibility: visible;  
+}
+.dropdown:hover .dropdown-menu {
+    display: block;
+	left: 100%;
+    top: 0px;
+}
+#page-wrapper{
+padding-left: 0px;
+    padding-right: 0px;
+	}
+	.center-width{width: 100%;}
+.navbar-right {
+    /*margin-top: 19px;*/
+}
+.navbar-right li > a {
+    color: #3a5dae;
+}
+.special-img {
+    position: relative;
+    top: -5px;
+    float: left;
+    left: -5px;
+}
+.row-margin{
+margin-right:0px;}
+.span4 h1{margin-left: 3%;color:}
+/* .collapse>li>a:hover, .collapse>li:hover {background:#fff;text-decoration:none;color: #3a5dae;} */
+.nav>li>a>img {
+    background: #fff;
+}
+footer>p{    color: #FFF !important;
+    font-size: 12px;
+    line-height: 1.1em;
+    text-decoration: none;
+    text-transform: uppercase;
+    /* font-family: 'gesans-regular', Arial, sans-serif;*/
+    text-align: center;
+    /* padding: 10px 0px; */
+    padding: 15px 0px 12px;
+    background-color: #3d3d3d;
+    letter-spacing: 0.09em ;
+	margin:0px;}
+	.row .col-md-3,.row .col-md-7,.row .col-md-2{background-color: #f3f3f3;    border-right: 1px solid #bfc2c5;}
+	.display-table{    display: -webkit-box;}
+	.bgColor-row{padding: 12px; background-color: #f3f3f3;}
+	h6 {
+   
+    font-size: 14px;
+    color: #26272b;
+    font-weight: bold;
+    line-height: 20px;
+    margin-bottom: 20px;
+}
+</style>
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Tangerine">
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+	<!-- start top -->
+<div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse" style="
+    background-color: rgb(47, 156, 228);
+">
+                   <br><br><ul class="nav" id="side-menu" style="background-color: rgb(47, 156, 228); ">
+                                           <li class="sidebar-search">
+                            <div class="input-group custom-search-form">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" style="    height: 34px;">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                            </div>
+                            <!-- /input-group -->
+                        </li>    
+                        <li style="/* background: #1e3d5c url(../images/buttons_top.gif);    background-repeat: no-repeat;    background-size: contain;padding-top: 14px;*/">
+                            <a href="#"><i class="fa  fa-tag fa-fw"></i> Manage Bulletins </a>
+                           <ul class="collapse in"> 
+                       
+						 <li>
+                            <a href="#"><i class="fa fa-book fa-fw"></i>  Add Bulletin</a>
+                        </li>
+						 <li>
+                            <a href="#"><i class="fa fa-edit fa-fw"></i>  Update Bulletin</a>
+                        </li>
+						 <li>
+                            <a href="#"><i class="fa fa-ban fa-fw"></i>  Cancel Bulletin</a>
+                        </li> 
+						
+						<li class="dropdown">
+							<a href="#"><i class="fa fa-bars fa-fw"></i> Bulletin Compliance</a>
+							<ul class="dropdown-menu sub-menu">						
+						<li>
+                            <a href="#"><i class="fa fa-crosshairs fa-fw"></i>  Bulletin Compliance By Number</a>
+                        </li> 
+						<li>
+                            <a href="#"><i class="fa fa-info-circle fa-fw"></i>  Fleet Summary Bulletin Compliance</a>
+                        </li> 
+						<li>
+                            <a href="#"><i class="fa fa-check-circle-o fa-fw"></i>  Bulletin Compliance By Engine</a>
+                        </li> 
+						<li>
+                            <a href="#"><i class="fa fa-folder fa-fw"></i>  Bulletin Compliance By Package</a>
+                        </li>
+					
+					</ul>
+			</li>	 </ul>				
+						 </li><li>
+                            <a href="#"><i class="fa fa-gears fa-fw"></i> Manage Product Tracking </a>
+                        </li>
+						<li>
+                            <a href="#"><i class="fa fa-user fa-fw"></i> Administration </a>
+                        </li>						 
+                   
+					</ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+			<!-- end top -->
+
+        <!-- Navigation -->
+        
+
+        <div id="page-wrapper"><nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0;     background-color: #fff;  /*    background-color: #3a5dae; background-color:#00254A;*//* rgb(32, 34, 111);*/">
+            <!-- /.navbar-header -->
+            <ul class="nav navbar-top-links navbar-left">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">
+                        <i class="fa fa-envelope-o fa-fw"> </i> news&amp;info 
+                    </a>                   
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">
+                        <i class="fa fa-list-alt fa-fw">  </i> events
+                    </a>                   
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">
+                        <i class="fa fa-tasks fa-fw">  </i> Tools&amp;training
+                    </a>                   
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">
+                        <i class="fa fa-bank fa-fw">  </i> library
+                    </a>                   
+                </li>
+				<li class="dropdown">
+                    <a class="dropdown-toggle" href="#">
+                        <i class="fa fa-table fa-fw">  </i> business units intranet
+                    </a>                   
+                </li>
+				<li class="dropdown">
+                    <a class="dropdown-toggle" href="#">
+                        <i class="fa fa-tags fa-fw">  </i> functional communities
+                    </a>                   
+                </li>
+				<li class="dropdown">
+                    <a class="dropdown-toggle" href="#">
+                        <i class="fa fa-retweet fa-fw">  </i> inside GEPS
+                    </a>                   
+                </li>
+                <!-- /.dropdown -->
+            </ul><!-- /.navbar-top-links -->
+
+           
+                
+                <!-- /.sidebar-collapse -->
+            </nav>
+  
+  <nav class="navbar navbar-default navbar-static-top" role="navigation" style="
+    background-color: rgb(16, 24, 32);
+    margin-bottom: 0px;
+    ">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                
+            </div>
+            <!-- /.navbar-header -->
+
+           <ul class="nav navbar-top-links navbar-right">
+		   <li>    <a href="#">
+					<img src="../images/profile.png" class="img-circle special-img">
+					<span class="header-username" style="
+    color: white;
+">Chuck Norris</span>
+				</a>
+			</li>
+                <li class="">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                     <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+						<li><a href="#"><i class="fa fa-edit fa-fw"></i> Help Desk</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                   </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul><!-- /.navbar-top-links -->
+
+            
+            <!-- /.navbar-static-side -->
+        </nav>
+            <div class="row row-margin">
+                <div class="col-lg-12">
+                   <!--  <h1 class="page-header">Dashboard</h1> --> 
+				   
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+			<div class="row">
+                <div class="col-lg-12">
+                        <div class="row"><div class="col-md-1"></div>
+      <div class="col-md-6" style="
+    margin-top: 9%;
+"><h1>Welcome To IBCT</h1><p>IBCT allow users to select Muliptle Timing Codes and save a
+Compliance Date for each one.It can capture the activity
+performed date and target obtained date.The system was
+designed to give the users the choice of capturing a Target
+Compliance Date or select an option according to the
+situation. IBCT has capability of tracking the products.What's
+New? IBCT now have administration module for allowing
+        admins to modify the users and add users.</p></div>
+        <div class="col-md-4" style="
+    margin-top: 11%;
+    background: none;
+    border: none;
+"><img class="center-block center-width" src="../images/ge-aero-turbine.jpg"></div>
+  
+    </div>
+                </div>
+                <!-- /.col-lg-4 -->
+                
+            </div>
+            <!-- /.row -->
+            
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+<div class="">
+      <!-- Example row of columns -->
+      <div class="row display-table bgColor-row">
+        <div class="col-md-3">
+<div class=" span1" style="
+    float: left;
+    
+    margin-left: 30px;
+    margin-top: 7%;
+"> <img src="../images/ge-monogram_footer.svg" alt="Imagination at work" width="49" height="49" style=""> </div><div class="span2" style="
+    float: left;
+    
+    margin-left: 30px;
+    margin-top: 11%;
+"><p>Imagination at work</p></div>        </div>
+        <div class="col-md-7">
+          <h6>GE Aero Energy Products</h6>
+          <p  style="text-align: justify;">GE is a world-leading provider of commerical, military and business and
+general aviation jet and turboprop engines and components as well as
+avionics, electrical power and mechanical systems for aircraft.</p>
+          <!-- <p><a class="btn btn-secondary" href="#" role="button">View details »</a></p> -->
+       </div>
+        <div class="col-md-2">
+          <h6>Contact Information</h6>
+
+<p>How can we help you?</p>
+
+<p><a style="color:#186ab9; cursor:pointer">Applicaiton Support <i class="fa fa-arrow-right"></i></a></p>
+
+<p><a style="color:#186ab9; cursor:pointer;">Help Docs <i class="fa fa-arrow-right"></i></a></p>
+          
+        </div>
+      </div>
+      <footer>
+        <p>© 2016 GENERAL ELECTRIC</p>
+      </footer>
+    </div>
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+ <script src="../vendor/jquery/jquery.min.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function() {   
+    setHeight();
+});
+
+$(window).resize(function() {
+     setHeight();   
+}); 
+
+function setHeight() {
+    windowHeight = $('#page-wrapper').innerHeight();
+    //$('.contentBG').css('min-height', windowHeight);   
+    console.log(windowHeight);
+ 	 $('.sidebar').css({'min-height':windowHeight,'background-color':'rgb(47, 156, 228)'});
+}
+	</script>
+
+    <!-- Bootstrap Core JavaScript -->
+<!--     <script src="../vendor/bootstrap/js/bootstrap.min.js"></script> -->
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <!-- <script src="../vendor/metisMenu/metisMenu.min.js"></script> -->
+
+    <!-- Morris Charts JavaScript -->
+   <!--  <script src="../vendor/raphael/raphael.min.js"></script>
+    <script src="../vendor/morrisjs/morris.min.js"></script>
+    <script src="../data/morris-data.js"></script> -->
+
+    <!-- Custom Theme JavaScript -->
+    <!-- <script src="../dist/js/ge-custome.js"></script> -->
+
+
+
+
+</body></html>

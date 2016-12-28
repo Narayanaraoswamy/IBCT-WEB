@@ -1,0 +1,7 @@
+---
+applications:
+  - name: ibct-web
+    buildpack: predix_openresty_buildpack
+    path: WebContent
+    memory: 64M
+    stack: cflinuxfs2

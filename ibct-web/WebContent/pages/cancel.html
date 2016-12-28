@@ -1,0 +1,90 @@
+
+<html ng-app="ibct-web">
+<head>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+<script src="../javascript/ibct-angular.js"></script>
+</head>
+<body>
+<div class="row ng-scope">
+	<div class="col-lg-12">
+		<h3 style="font-weight: bolder; margin-left: 14px;">Manage
+			Bulletins</h3>
+		<p style="margin-left: 14px; font-size: 14px;">Please select
+			Product line and Bulleting Type. Fields marked with asterisk (*) are
+			required.</p>
+	</div>
+	<div class="col-lg-12" ng-controller="cancelController">
+		<div class="panel">
+			<div class="panel-heading" style="background-color: #F2EFEB;">
+				Cancel Bulletin</div>
+			<div class="panel-body">
+				<table style="">
+					<tbody>
+						<tr>
+							<td style="width: 25%;"><label for="disabledSelect"><font
+									color="red">*</font>Product Line:</label></td>
+							<td style="width: 200px;"><select id="disabledSelect"
+								ng-model="cancelController.productLines"
+								ng-options="pl.productLine for pl in productLines track by pl.productLine"
+								ng-change="fillBulletins()" class="form-control"><option
+										value="">select</option>
+							</select>
+							</td>
+
+							<td style=""><label for="disabledSelect"><font
+									color="red">*</font>Bulletin Type:</label></td>
+							<td style="width: 21%;"><select id="disabledSelect"
+								ng-model="cancelController.bulletinTypes"
+								ng-options="bl for bl in bulletinTypes track by bl"
+								ng-change="fillBulletins()" class="form-control" style=""><option
+										value="">select</option></select>
+							</td>
+							<td style=""><button type="button" ng-click="cancelBulletin()" ng-disabled="cancelButtonLink"class="btn btn-ge">Cancel
+									Bulletin</button></td>
+						</tr>
+						<tr>
+							<td style=""><label for="disabledSelect"><font
+									color="red">*</font>Bulletin#:</label></td>
+							<td style=""><select style="width: 100%;" ng-disabled="formLink" ng-change="enableButtonLink()"
+												ng-model="cancelController.bulletinNumbers" ng-options="bulletin.bulletinNum for bulletin in bulletinNumbers track by bulletin.bulletinNum" class="form-control"><option
+														value="">select</option></select>
+							</td>
+							<td style=""><label for="disabledSelect">Status:</label></td>
+							<td style="">{{cancelController.bulletinNumbers.bulletinStatus}}</td>
+							<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+
+						</tr>
+
+
+					</tbody>
+				</table>
+
+
+			</div>
+		</div>
+	</div>
+
+	<!-- /.col-lg-4 -->
+
+	<!-- <div class="row"> -->
+
+	<!-- </div> -->
+
+	<!-- /.col-lg-4 -->
+	<div class="col-lg-12">
+		<!-- <div class="panel panel-success">
+                        <div class="panel-heading">
+                            Success Panel
+                        </div>
+                        <div class="panel-body">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+                        </div> -->
+		<!--  <div class="panel-footer">
+                            Panel Footer
+                        </div> -->
+		<!-- </div> -->
+	</div>
+	<!-- /.col-lg-4 -->
+</div></body>

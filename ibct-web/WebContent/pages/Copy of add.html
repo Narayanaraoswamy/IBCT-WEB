@@ -1,0 +1,317 @@
+<html ng-app="ibct-web">
+<head>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+<script src="../javascript/ibct-angular.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {   
+    setHeight();
+	$('#timeID').change(function() {
+            console.log($(this).val());
+        }).multipleSelect({
+            width: '100%'
+        });
+});
+
+$(window).resize(function() {
+     setHeight();   
+}); 
+
+function setHeight() {
+    windowHeight = $('#page-wrapper').innerHeight();
+    //$('.contentBG').css('min-height', windowHeight);   
+    console.log(windowHeight);
+ 	 $('.sidebar').css({'min-height':windowHeight,'background-color':'rgb(47, 156, 228)'});
+}
+	</script>
+</head>
+
+<div class="row row-margin">
+	<div class="col-lg-12">
+		<!--  <h1 class="page-header">Dashboard</h1> -->
+
+	</div>
+	<!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row" ng-controller="addController">
+	<div class="col-lg-12">
+		<h3 style="font-weight: bolder; margin-left: 14px;">Manage
+			Bulletins</h3>
+		<p style="margin-left: 14px; font-size: 14px;">Please select
+			Product line and Bulleting Type. Fields marked with asterisk (*) are
+			required.</p>
+	</div>
+	<div class="col-lg-12">
+		<div class="panel">
+			<div class="panel-heading" style="background-color: #F2EFEB;">
+				Add Bulletin</div>
+			<div class="panel-body">
+				<table>
+					<tbody>
+						<tr>
+							<td style="width: 14%;"><label for="disabledSelect"><font
+									color="red">*</font>Product Line:</label></td>
+							<td style="width: 28%;"><select id="disabledSelect"
+								ng-model="addController.productLines"
+								ng-options="pl.productLine for pl in productLines track by pl.productLine"
+								ng-change="enableButton()" class="form-control"><option
+										value="">select</option>
+							</select></td>
+							<td></td>
+
+							<td style="width: 19%;"><label for="disabledSelect"><font
+									color="red">*</font>Bulletin Type:</label></td>
+							<!--<td style="width: 28%;"><select id="disabledSelect"
+								ng-model="addController.bulletinTypes"
+								ng-options="bl.bulletinType for bl in bulletinTypes track by bl.bulletinType"
+								ng-change="enableButton()" class="form-control" style=""><option
+										value="">select</option></select></td>-->
+
+
+							<td style="width: 28%;"><select id="disabledSelect"
+								ng-model="addController.bulletinTypes"
+								ng-options="bl for bl in bulletinTypes track by bl"
+								ng-change="enableButton()" class="form-control" style=""><option
+										value="">select</option></select></td>
+							<td style=""><button type="button" class="btn btn-ge"
+									ng-disabled="buttonLink" ng-click="enableForm()">Add
+									Bulletin</button></td>
+						</tr>
+						<tr style="padding: 0px;">
+							<td colspan="4" style="padding: 0px;"><p
+									style="margin-top: 31px;">Please fill below details and
+									click save. Fields marked with an asterisk(*) are required.</p></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<!-- /.col-lg-4 -->
+	<div class="col-lg-12">
+		<div class="panel">
+			<div class="panel-heading" style="background-color: #F2EFEB;">
+				Bulletin Details</div>
+			<div class="panel-body">
+				<table class="">
+					<tbody>
+						 <tr>
+							<td><label>Bulletin Type:</label></td>
+							<td ng-disabled="formLink">
+								{{addController.bulletinTypes}}</td>
+							<td><label>Product Line:</label></td>
+							<td>{{addController.productLines.productLine}}</td>
+							<td></td>
+						</tr>
+ 
+						<tr>
+							<td style="width: 15%;"><label><font color="red">*</font>Bulletin#:</label></td>
+							<td style="width: 25%;"><input type="textbox" ng-model="addController.bulletin" 
+								ng-disabled="formLink" class="form-control"></td>
+							<td style="width: 21%;"><label><font color="red">*</font>Revision:</label></td>
+							<td style="width: 26%;"><input type="textbox" ng-model="addController.revision"
+								ng-disabled="formLink" class="form-control"></td>
+						</tr>
+
+						<tr>
+							<td><label><font color="red">*</font>Description:</label></td>
+							<td><input type="textbox" ng-disabled="formLink" ng-model="addController.description"
+								class="form-control"></td>
+							<td><label>Supercedes:</label></td>
+							<td><select style="width: 100%;" ng-disabled="formLink" ng-model="addController.supercedes"
+								class="form-control"><option value="">select</option></select></td>
+						</tr>
+
+
+						<tr>
+							<td><label><font color="red">*</font>Category:</label></td>
+							<td><select class="form-control" style="width: 100%;"
+								ng-model="addController.category" ng-disabled="formLink"
+								ng-options="c.Category for c in category track by c.Category"><option
+										value="">select</option></select></td>
+							<td><label><font color="red">*</font>Compliance
+									Level:</label></td>
+							<td><select class="form-control" ng-disabled="formLink"
+								style="width: 100%;" ng-model="addController.complianceLevel"
+								ng-options="cl.compLevel for cl in complianceLevel track by cl.compLevel"><option
+										value="">select</option></select></td>
+						</tr>
+
+
+						<tr>
+							<td><label><font color="red">*</font>Timing:</label></td>
+							<td colspan="3"><select id="timeID" multiple="multiple"
+								class="form-control" size="5" style="width: 100%;"
+								ng-model="addController.timing.Timing"
+								ng-options="t.Timing for t in timing track by t.Timing"
+								ng-disabled="formLink">
+									
+									</select></td>
+
+						</tr>
+
+						<tr>
+							<td><label><font color="red">*</font>Rev Date:</label></td>
+							<td><input type="date" ng-bind="ComplainceDate"
+								ng-disabled="formLink" class="form-control ng-binding" ng-model="addController.revDate"
+								style="width: 100%;"></td>
+							<td><label>Track Implementation Plan:</label></td>
+							<td><input type="checkbox" ng-disabled="formLink" ng-model="addController.trackImplementationPlan"></td>
+						</tr>
+
+						<tr>
+							<td><label><font color="red">*</font>Issue Date:</label></td>
+							<td><input type="date" ng-bind="ComplainceDate"
+								ng-disabled="formLink" class="form-control ng-binding"
+								style="width: 100%;" ng-model="addController.issueDate"></td>
+							<td><label>Significant:</label></td>
+							<td><input type="checkbox" ng-disabled="formLink" ng-model="addController.significant"></td>
+						</tr>
+
+						<tr>
+							<td><label><font color="red">*</font>Voucher
+									Program:</label></td>
+							<td><input type="checkbox" ng-disabled="formLink" ng-model="addController.voucherProgram"></td>
+							<td><label>Significant:</label></td>
+							<td><input type="checkbox" ng-disabled="formLink" ng-model="addController.significant"></td>
+						</tr>
+
+						<tr>
+							<td><label>Remarks:</label></td>
+							<td colspan="3"><textarea class="form-control"
+									style="width: 100%;" ng-disabled="formLink" ng-model="addController.remarks"></textarea></td>
+
+						</tr>
+
+					</tbody>
+				</table>
+				<!-- <hr> -->
+			</div>
+		</div>
+	</div>
+	<!-- <div class="row"> -->
+	<div class="col-lg-12">
+		<div class="panel panel-blue">
+			<div class="panel-heading">Included Serial Numbers</div>
+			<div class="panel-body">
+				<div class="col-lg-6">
+                                  <table class="">
+                                         <tbody>
+                                                <tr>
+                                                       <td><label><font color="red">*</font>From:</label></td>
+                                                       <td></td>
+                                                       <td><label>To:</label></td>
+                                                </tr>
+                                                <tr>
+                                                       <td><select name="num"  multiple size="4" style="width: 100%;" ng-model="addController.fromSN" 
+                                                    ng-options="fsn.serialNum for fsn in fromSN track by fsn.serialNum">
+                                                                     <option >select</option>
+                                                                     <option >select</option>
+                                                                     <option >select</option>
+                                                                     <option >select</option>
+                                                       </select></td>
+                                                       <td>
+                                                              <table>
+                                                                     <tbody>
+                                                                           <tr>
+                                                                                  <td>
+                                                                                         <button type="button" class="btn btn-ge btn-width" ng-click="addSN(addController.fromSN,addController.toSN)" ng-disabled="formLink">Add</button>
+                                                                                  </td>
+                                                                           </tr>
+                                                                           <tr>
+                                                                                  <td>
+                                                                                         <button type="button" class="btn btn-ge btn-width" ng-disabled="formLink">Clear</button>
+                                                                                         <!-- <button id="save" style="background: url('../images/add_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button>
+                                  <br/>
+                                  <button id="save" style="background: url('../images/clear_off.gif');    background-size: initial;    width: 70px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button> -->
+                                                                                  </td>
+                                                                           </tr>
+                                                                     </tbody>
+                                                              </table>
+                                                       </td>
+                                                       <td><select name="num"  size="4" style="width: 100%;" ng-model="addController.toSN"
+                                                       ng-options="tsn.serialNumb for tsn in toSN track by tsn.serialNumb">
+                                                                     <option>select</option>
+                                                                     <option >select</option>
+                                                                     <option >select</option>
+                                                                     <option >select</option>
+                                                       </select></td>
+                                                </tr>
+                                                <tr>
+                                                </tr>
+                                         </tbody>
+                                  </table>
+                           </div>
+
+
+				<div class="col-lg-6">
+					<!-- <div class="panel panel-default"><div class="panel-body">				  <div class="panel panel-default"><div class="panel-body">				   -->
+				<table class="table">
+                                         <tbody>
+                                                <tr>
+                                                       <td><label>select</label></td>
+                                                       <td><label>From Serial#:</label></td>
+                                                       <td><label>To Serial#:</label></td>
+                                                       
+                                                       
+                                                </tr>
+                                                <tr ng-repeat="item in serialNumber" >
+                                                       <td><input type="checkbox"></td>
+                                                       <td >{{item.fromSNum}}</td>
+                                                       <td >{{item.toSNum}}</td>
+                                                </tr>
+                                                <tr>
+                                                       <td colspan="3" style="border: none;">
+                                                              <button id="delete" class="btn btn-ge btn-width">Delete</button>
+                                                             
+                                                       </td>
+                                                </tr>
+                                         </tbody>
+                                  </table>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- </div> -->
+	<div class="col-lg-6 pull-right" style="margin-bottom: 5px;">
+		<table style="background-color: #fff; border: none;">
+			<tbody>
+				<tr>
+					<td style="background-color: #fff; border: none;">
+						<!-- <button id="save" style="background: url('../images/save_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button>
+					<button id="clear" style="background: url('../images/clear_off.gif');    background-size: initial;    width: 70px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button>
+					<button id="close" style="background: url('../images/close_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button> -->
+						<button id="save" class="btn btn-ge btn-width" ng-click="saveFormControlFields()"
+							ng-disabled="formLink">Save</button>
+						<button id="clear" class="btn btn-ge btn-width"
+							ng-click="clearFormControlFields()" ng-disabled="formLink">Clear</button>
+						<button id="cancel" class="btn btn-ge btn-width"
+							ng-disabled="formLink">Cancel</button>
+					</td>
+				</tr>
+
+			</tbody>
+		</table>
+	</div>
+
+	<!-- /.col-lg-4 -->
+	<div class="col-lg-12">
+		<!-- <div class="panel panel-success">
+                        <div class="panel-heading">
+                            Success Panel
+                        </div>
+                        <div class="panel-body">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+                        </div> -->
+		<!--  <div class="panel-footer">
+                            Panel Footer
+                        </div> -->
+		<!-- </div> -->
+	</div>
+	<!-- /.col-lg-4 -->
+</div>
+<!-- /.row -->
+
+</html>

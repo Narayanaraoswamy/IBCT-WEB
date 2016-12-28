@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="ibct-web">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/WebContent/pages"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/WebContent/css"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/WebContent/images"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/WebContent/javascript"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/WebContent/vendor"/>
+        <property name="context-root" value="ibct-web"/>
+        <property name="java-output-path" value="/ibct-web/build/classes"/>
+    </wb-module>
+</project-modules>

@@ -1,0 +1,459 @@
+<html ng-app="ibct-web">
+<head>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+<script type="text/javascript"
+	src="../javascript/ui-bootstrap-tpls-2.3.1.min.js"></script>
+<script src="../javascript/ibct-angular.js"></script>
+
+
+<style>
+.panel-body {
+	padding: 15px;
+}
+
+.table-border>tbody>tr>th {
+	padding: 12px;
+	border-top: 0px solid #ddd;
+	border: 3px solid #f2efeb;
+}
+
+.table-border>tbody>tr>td {
+	text-align: center;
+	border: 3px solid #f2efeb;
+}
+</style>
+</head>
+
+<div class="row row-margin">
+	<div class="col-lg-12">
+		<!--  <h1 class="page-header">Dashboard</h1> -->
+
+	</div>
+	<!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row" ng-controller="updateController">
+	<div class="col-lg-12">
+		<h3 style="font-weight: bolder; margin-left: 14px;">Manage
+			Bulletins</h3>
+		<p style="margin-left: 14px; font-size: 14px;">Please select
+			Product line and Bulleting Type. Fields marked with asterisk (*) are
+			required.</p>
+	</div>
+	<form name="updateBulletin"
+		ng-submit="updateExistingBulletin(updateController.bulletinNumbers.bulletinStatus)">
+		<div class="col-lg-12">
+			<div class="panel">
+				<div class="panel-heading" style="background-color: #F2EFEB;">
+					Update Bulletin</div>
+				<div class="panel-body">
+					<table style="">
+						<tbody>
+							<tr>
+								<td style="width: 25%;"><label for="disabledSelect"><font
+										color="red">*</font>Product Line:</label></td>
+								<td style="width: 200px;"><select id="disabledSelect"
+									style="text-transform: uppercase;"
+									ng-model="updateController.productLines"
+									ng-options="pl.productLine for pl in productLines track by pl.productLine"
+									ng-change="fillBulletins()" class="form-control"><option
+											value="">select</option>
+								</select></td>
+
+								<td style=""><label for="disabledSelect"><font
+										color="red">*</font>Bulletin Type:</label></td>
+								<td style="width: 21%;"><select id="disabledSelect"
+									style="text-transform: uppercase;"
+									ng-model="updateController.bulletinTypes"
+									ng-options="bl.codeDescription for bl in bulletinTypes track by bl.codeID"
+									ng-change="fillBulletins()" class="form-control" style="""><option
+											value="">select</option></select></td>
+								<td style=""></td>
+							</tr>
+							<tr>
+								<td style=""><label for="disabledSelect"><font
+										color="red">*</font>Bulletin:</label></td>
+								<td style=""><select
+									style="width: 100%; text-transform: uppercase;"
+									ng-disabled="formLink"
+									ng-model="updateController.bulletinNumbers"
+									ng-change="changeBulletinRevisions(updateController.bulletinNumbers.bulletinNum)"
+									ng-options="bulletin.bulletinNum for bulletin in bulletinNumbers track by bulletin.bulletinNum"
+									class="form-control"><option value="">select</option></select>
+
+								</td>
+								<td style=""><label for="disabledSelect">Status:</label></td>
+								<td style="">{{updateController.bulletinNumbers.bulletinStatus}}</td>
+								<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-lg-12">
+			<div class="panel">
+				<div class="panel-heading" style="background-color: #F2EFEB;">
+					Bulletin Details</div>
+				<div class="panel-body">
+					<table style="" width="50%">
+						<tbody>
+
+							<tr>
+								<td width="25%"><label>Bulletin#:</label></td>
+								<td colspan="3">{{updateController.bulletinNumbers.bulletinNum}}</td>
+							</tr>
+							<tr>
+								<td><label>Bulletin Type:</label></td>
+								<td>{{updateController.bulletinTypes.codeDescription}}</td>
+								<td></td>
+								<td><label>Product Line:</label></td>
+								<td>{{updateController.productLines.productLine}}</td>
+							</tr>
+							<tr>
+								<td><label>Issue Date:</label></td>
+								<td>{{updateController.bulletinNumbers.issueDate |
+									date:'yyyy/MM/dd'}}</td>
+								<td></td>
+								<td><label>Supercedes</label></td>
+								<td>{{updateController.bulletinNumbers.supercededBulletinNum}}</td>
+							</tr>
+
+						</tbody>
+					</table>
+
+
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-12">
+			<div class="panel">
+				<div class="panel-heading" style="background-color: #F2EFEB;">
+					Bulletin Revisions</div>
+				<div class="panel-body">
+					<table class="table-border" style="width: 100%;">
+						<tbody>
+							<tr>
+								<th>Select</th>
+								<th>Revision</th>
+								<th>Rev Date</th>
+								<th style="width: 30%; text-align: center;">Description</th>
+								<th>Category</th>
+								<th>Compliance Level</th>
+								<th>Track<br />Implementation Plan
+								</th>
+							</tr>
+							<tr ng-model="revisions" ng-repeat="rev in revisions">
+								<td><input type="radio" name="revisions" autocomplete="off"
+									ng-click="changeRevision(rev)"
+									id="{{rev.bulletinNum +'|'+ rev.revisionId +'|'+ rev.timingCode}}"></td>
+								<td>{{rev.revisionId}}</td>
+								<td>{{rev.revisionDate| date:'yyyy/MM/dd'}}</td>
+								<td>{{rev.revisionDescription}}</td>
+								<td>{{rev.category}}</td>
+								<td>{{rev.complianceLevel}}</td>
+								<td>{{rev.trackImplimentationPlan}}</td>
+								<td style="display: none;">{{rev.significant}}</td>
+							</tr>
+
+						</tbody>
+					</table>
+
+
+				</div>
+			</div>
+		</div>
+		<!-- /.col-lg-4 -->
+		<div class="col-lg-12">
+			<div class="col-lg-12">
+				<div class="panel">
+					<div class="panel-heading" style="background-color: #F2EFEB;">
+						Editable Bulletin Details</div>
+					<div class="panel-body">
+						<table class="" style="width: 100%;">
+
+
+							<tbody>
+								<tr>
+									<td><table
+											style="border: 1px solid rgba(242, 239, 235, 0.98);
+	/* margin-top: 25px; */ width: 100%;
+	/* border: 1px solid rgba(47, 156, 228, 0.66); */
+	/* margin-top: 26px; */
+	/* box-shadow: 2px 2px 2px 1px rgba(47, 156, 228, 0.66); */ box-shadow: 2px 2px 2px 2px rgba(152, 135, 146, 0.45);">
+											<tbody>
+												<tr>
+													<td><label><font color="red">*</font>Revision:</label></td>
+													<td style="width: 25%;"><input type="textbox"
+														class="form-control" ng-model="changedRevision.revision"
+														text="{{changedRevision.revision}}" ng-disabled="formlink"
+														required name="revision">
+														<div ng-messages="updateBulletin.revision.$error"></div></td>
+													<td><label><font color="red">*</font>Description:<label></label></label></td>
+													<td><input type="textbox" class="form-control"
+														text="{{changedRevision.revisionDescription}}"
+														ng-bind="revisionDate" value={{revisionDate}}
+														ng-change="dateCheck(changedRevision.revisionDate)"
+														ng-model="changedRevision.revisionDescription"
+														ng-disabled="formlink" required name="description">
+														<div ng-messages="updateBulletin.description.$error"></div>
+													</td>
+												</tr>
+
+												<!-- <tr>
+				  
+				  <td>Supercedes:</td>
+				  <td><select><option>select</option></select></td>
+				  </tr> -->
+
+
+												<tr>
+													<td><label><font color="red">*</font>Category:</label></td>
+													<td><select class="form-control"
+														style="text-transform: uppercase;"
+														ng-model="changedRevision.category" ng-multi-select
+														ng-options="c.codeDescription as [c.codeName,c.codeDescription].join(' - ')  for c in bulletinCategory"
+														ng-disabled="formlink" required name="category"><option
+																value="">select</option></select>
+														<div ng-messages="updateBulletin.category.$error"></div></td>
+													<td><label><font color="red">*</font>Compliance
+															Level:</label></td>
+													<td><select class="form-control"
+														ng-disabled="formlink"
+														style="width: 100%; text-transform: uppercase;"
+														ng-model="changedRevision.complianceLevel"
+														ng-options="cl.codeID as [cl.codeID,cl.compLevel].join(' - ') for cl in complianceLevel track by cl.codeID"
+														required name="compLevel"><option value="">select</option></select>
+														<div ng-messages="updateBulletin.compLevel.$error"></div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+										<table
+											style="border: 1px solid rgba(242, 239, 235, 0.98);
+	/* margin-top: 25px; */ width: 100%;
+	/* border: 1px solid rgba(47, 156, 228, 0.66); */
+	/* margin-top: 26px; */
+	/* box-shadow: 2px 2px 2px 1px rgba(47, 156, 228, 0.66); */ box-shadow: 2px 2px 2px 2px rgba(152, 135, 146, 0.45);
+	/* width: 100%; */ margin-top: 20px;">
+											<tbody>
+												<tr>
+													<td></td>
+												</tr>
+												<tr>
+													<td><label><font color="red">*</font>Timing:</label></td>
+													<td colspan="7"><select id="timeID"
+														multiple="multiple" class="form-control" size="5"
+														style="width: 100%; text-transform: uppercase;"
+														ng-model="updateController.timingSelected" ng-multi-select
+														ng-options="t.codeName +' - '+ t.codeDescription disable when t.isdisabled for t in timing track by t.codeID"
+														ng-disabled="formlink" required name="timing">
+
+													</select>
+														<div ng-messages="updateBulletin.timing.$error"></div></td>
+
+												</tr>
+
+												<tr>
+													<td><label><font color="red">*</font>Rev Date:</label></td>
+													<td colspan="2"><input type="date" style="width: 30%"
+														class="ng-binding form-control"
+														ng-model="changedRevision.revisionDate"
+														ng-disabled="formlink" required name="revDate">
+														<div ng-messages="updateBulletin.revDate.$error"></div></td>
+
+												</tr>
+
+
+
+												<tr>
+													<td colspan="8"><table width="100%">
+															<tr>
+																<td><label>Voucher
+																		Program:&nbsp;&nbsp;&nbsp;</label><input type="checkbox"
+																	ng-checked="changedRevision.voucherProgram==Y"
+																	ng-true-value="'Y'" ng-false-value="'N'"
+																	ng-model="changedRevision.voucherProgram"
+																	ng-disabled="formlink"></td>
+																<td><label>Field Implementation
+																		Metric:&nbsp;&nbsp;&nbsp;</label><input type="checkbox"
+																	ng-checked="changedRevision.fieldImplimentationMetric==Y"
+																	ng-true-value="'Y'" ng-false-value="'N'"
+																	ng-model="changedRevision.fieldImplimentationMetric"
+																	ng-disabled="formlink" /></td>
+																<td><label>Track Implementation
+																		Plan:&nbsp;&nbsp;&nbsp;</label><input type="checkbox"
+																	ng-checked="changedRevision.trackImplimentationPlan==Y"
+																	ng-true-value="'Y'" ng-false-value="'N'"
+																	ng-model="changedRevision.trackImplimentationPlan"
+																	ng-disabled="formlink" /></td>
+
+																<td><label>Significant:&nbsp;&nbsp;&nbsp;</label><input
+																	type="checkbox"
+																	ng-checked="changedRevision.significant==Y"
+																	ng-true-value="'Y'" ng-false-value="'N'"
+																	ng-model="changedRevision.significant"
+																	ng-disabled="formlink" /></td>
+																<td><label>New Revision:&nbsp;&nbsp;&nbsp;</label><input
+																	type="checkbox" ng-model="updateController.newRevision"
+																	ng-disabled="formlink"></td>
+															</tr>
+														</table></td>
+
+
+												</tr>
+
+												<tr>
+													<td><label>Remarks:</label></td>
+													<td colspan="7"><textarea class="form-control"
+															ng-model="changedRevision.remarks" ng-disabled="formlink"></textarea></td>
+
+												</tr>
+
+											</tbody>
+										</table></td>
+								</tr>
+
+							</tbody>
+						</table>
+						<!-- <hr> -->
+					</div>
+				</div>
+			</div>
+			<!-- <div class="row"> -->
+			<div class="col-lg-12">
+				<div class="panel panel-blue">
+					<div class="panel-heading">Included Serial Numbers</div>
+					<div class="panel-body">
+						<div class="col-lg-6">
+							<table class="">
+								<tbody>
+									<tr>
+										<td><label><font color="red">*</font>From:</label></td>
+										<td></td>
+										<td><label>To:</label></td>
+									</tr>
+									<tr>
+										<td style="width: 47%;"><select name="num" multiple
+											size="4" style="width: 100%;"
+											ng-model="updateController.fromSN"
+											ng-options="fsn for fsn in fromSN track by fsn"
+											ng-disabled="formlink" required
+											ng-change="disableTo(updateController.fromSN)">
+												<option>select</option>
+												<option>select</option>
+												<option>select</option>
+												<option>select</option>
+										</select>
+											<div ng-messages="updateBulletin.num.$error"></div></td>
+										<td>
+											<table>
+												<tbody>
+													<tr>
+														<td>
+															<button type="button" class="btn btn-ge btn-width"
+																ng-click="addSN(updateController.fromSN,updateController.toSN)"
+																ng-disabled="formLink">Add</button>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<button type="button" class="btn btn-ge btn-width"
+																ng-disabled="formLink" ng-click="clearSerialNo()">Clear</button> <!-- <button id="save" style="background: url('../images/add_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button>
+                                  <br/>
+                                  <button id="save" style="background: url('../images/clear_off.gif');    background-size: initial;    width: 70px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button> -->
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</td>
+										<td style="width: 47%;"><select name="num" size="4"
+											style="width: 100%;" ng-model="updateController.toSN"
+											ng-options="tsn for tsn in toSN track by tsn"
+											ng-disabled="multiFromSerial">
+												<option>select</option>
+												<option>select</option>
+												<option>select</option>
+												<option>select</option>
+										</select></td>
+									</tr>
+									<tr>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="col-lg-6">
+							<!-- <div class="panel panel-default"><div class="panel-body">				  <div class="panel panel-default"><div class="panel-body">				   -->
+							<table class="table">
+								<tbody>
+									<tr>
+										<td><label>select</label></td>
+										<td><label>From Serial#:</label></td>
+										<td><label>To Serial#:</label></td>
+									</tr>
+									<tr ng-repeat="item in serialNumber">
+										<td><input type="checkbox"></td>
+										<td>{{item.fromSNum}}</td>
+										<td>{{item.toSNum}}</td>
+									</tr>
+									<tr>
+										<td colspan="3" style="border: none;">
+											<button id="delete" class="btn btn-ge btn-width"
+												type="button" ng-click="removeItem($index)"
+												ng-disabled="formlink">Delete</button> <!-- <button id="save" style="background: url('../images/delete_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button> -->
+											<!-- <img src="../images/clear_off.gif"//> -->
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- </div> -->
+			<div class="col-lg-6 pull-right" style="margin-bottom: 5px;">
+				<table style="background-color: #fff; border: none;">
+					<tbody>
+						<tr>
+							<td style="background-color: #fff; border: none;">
+								<!-- <button id="save" style="background: url('../images/save_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button>
+					<button id="clear" style="background: url('../images/clear_off.gif');    background-size: initial;    width: 70px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button>
+					<button id="close" style="background: url('../images/close_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button> -->
+								<button id="save" class="btn btn-ge btn-width" type="submit"
+									ng-disabled="saveDisabled">Save</button>
+								<button id="clear" class="btn btn-ge btn-width" type="button"
+									ng-click="clearFormControlFields()" ng-disabled="formlink">Clear</button>
+								<button id="cancel" type="button" class="btn btn-ge btn-width"
+									ng-disabled="formlink">
+									<a href="#/"> Cancel </a>
+								</button>
+							</td>
+						</tr>
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</form>
+	<!-- /.col-lg-4 -->
+	<div class="col-lg-12">
+		<!-- <div class="panel panel-success">
+                        <div class="panel-heading">
+                            Success Panel
+                        </div>
+                        <div class="panel-body">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+                        </div> -->
+		<!--  <div class="panel-footer">
+                            Panel Footer
+                        </div> -->
+		<!-- </div> -->
+	</div>
+	<!-- /.col-lg-4 -->
+</div>
+<!-- /.row -->
+
+</html>
