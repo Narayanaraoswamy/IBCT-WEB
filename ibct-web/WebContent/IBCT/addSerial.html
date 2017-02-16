@@ -1,0 +1,180 @@
+<html ng-app="ibct-web">
+<head>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+<script type="text/javascript"
+	src="../javascript/ui-bootstrap-tpls-2.3.1.min.js"></script>
+<script src="../javascript/ibct-angular.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.1/angular-material.js"></script>
+<style>
+.tempWidth {
+	width: 100%;
+}
+
+label {
+	font-size: 14px;
+}
+</style>
+<style>
+.panel-body {
+	padding: 15px;
+}
+
+.table-border>tbody>tr>th {
+	padding: 12px;
+	border-top: 0px solid #ddd;
+	border: 3px solid #f2efeb;
+}
+
+.table-border>tbody>tr>td {
+	text-align: center;
+	border: 3px solid #f2efeb;
+}
+
+:disabled {
+	background-color: #CCD1D1;
+}
+</style>
+</head>
+<div class="row" ng-controller="addSerialController">
+	<div class="col-lg-12">
+		<h3 style="font-weight: bolder; margin-left: 14px;">Manage
+			Bulletins</h3>
+		<label for="disabledSelect"><font
+									color="red"><h2>This page is under development</h2></font></label>
+		<p style="margin-left: 14px; font-size: 14px;">Please select
+			Product line and Bulleting Type. Fields marked with asterisk (*) are
+			required.</p>
+	</div>
+
+	<div class="col-lg-12">
+		<div class="panel">
+			<div class="panel-heading" style="background-color: #F2EFEB;">
+				Add Serials</div>
+			<div class="panel-body">
+				<table>
+					<tbody>
+						<tr>
+							<td style="width: 25%;"><label for="disabledSelect"><font
+									color="red">*</font>Product Line:</label></td>
+							<td style="width: 200px;"><select id="disabledSelect"
+								style="text-transform: uppercase;"
+								ng-model="addSerialController.productLines"
+								ng-options="pl.productLine for pl in productLines track by pl.productLine"
+								ng-change="fillBulletins()" class="form-control"><option
+										value="">select</option>
+							</select></td>
+
+							<td style="width: 25%;"><label for="disabledSelect"><font
+									color="red">*</font>Bulletin Type:</label></td>
+							<td style="width: 200px;"><select id="disabledSelect"
+								style="text-transform: uppercase;"
+								ng-model="addSerialController.bulletinTypes"
+								ng-options="bl.codeDescription for bl in bulletinTypes track by bl.codeID"
+								ng-change="fillBulletins()" class="form-control" style="""><option
+										value="">select</option></select></td>
+
+						</tr>
+						<tr>
+							<td style=""><label for="disabledSelect"><font
+									color="red">*</font>Bulletin#:</label></td>
+							<td style=""><select
+								style="width: 100%; text-transform: uppercase;"
+								ng-model="addSerialController.bulletinNumbers"
+								ng-change="changeBulletinSerials()"
+								ng-options="bulletin.bulletinNum for bulletin in bulletinNumbers track by bulletin.bulletinNum"
+								class="form-control"><option value="">select</option></select></td>
+							<td style=""><label for="disabledSelect"><font
+									color="red">*</font>Revision:</label></td>
+							<td style=""><!-- <select class="form-control"
+								id="disabledSelect" ng-model="editSerialController.revsion"><option
+										value="">select</option>
+									<option ng-repeat="revision in revisionList">{{revision}}</option></select> -->
+									
+									<input type="text" class="form-control" ng-model="latestRevision"/>
+									</td>
+
+						</tr>
+
+					</tbody>
+				</table>
+			</div>
+	<div class="col-lg-12">
+			<div class="panel">
+				<div class="panel-heading" style="background-color: #F2EFEB;">
+					Timing Codes Selected</div>
+				<div class="panel-body">
+					<table style="" width="50%">
+						<tbody>
+
+							<tr ng-repeat="timingg in uniqueTimingCode">
+								<!-- <td width="25%"><label>Timing Codes: </label></td>
+								<td colspan="3">{{uniqueTimings}}</td> -->
+								<td>{{timingg.timingCode}} - {{timingg.timingCodeDesc}}</td>
+							</tr>
+							
+						
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+			
+			
+			<div class="panel-body">
+				<div class="col-lg-6">
+					<table class="">
+						<tbody>
+							<tr>
+								<td style=""><label style=""><font color="red">*</font>Issue
+										Date:</label></td>
+								<td style="" colspan="4"><input type="date" id="datepicker"
+									ng-bind="IssueDate" ng-disabled="formLink" min="1950-01-01"
+									max="2100-12-31" class="form-control ng-binding"
+									value={{IssueDate}} ng-model="addSerialController.issueDate"
+									ng-change="dateCheck(addController.issueDate)"
+									style="width: 100%;" required="required"></td>
+							</tr>
+							<tr>
+								<td><label><font color="red">*</font>Add Individual
+										Serials:</label></td>
+								<td colspan="12"><textarea class="form-control"
+										style="width: 200%; overflow: auto; resize: none;"
+										ng-disabled="formLink"
+										ng-model="addSerialController.individualSerial"></textarea></td>
+							</tr>
+							<tr>
+								<td><label><font color="red">*</font> Add Range of
+										Serials :</label></td>
+
+								<td colspan="12"><textarea class="form-control"
+										style="width: 200%; overflow: auto; resize: none;"
+										ng-disabled="formLink"
+										ng-model="addSerialController.rangeOfSerials"
+										onkeypress="this.value=this.value.toUpperCase()"
+										pattern="[A-Za-z0-9 !@#$%^&*()-_=+/ ~`,.]{1,150}"
+										title="special characters are not allowed" maxlength="250"></textarea></td>
+							</tr>
+							<tr>
+								<br>
+								<td style=""><button type="button" class="btn btn-ge"
+										rows="5" ng-disabled="buttonLink" ng-click="loadSerials()">Save</button></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
+			</div>
+
+
+
+		</div>
+
+
+	</div>
+
+
+</div>
+</html>

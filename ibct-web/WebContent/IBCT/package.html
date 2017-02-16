@@ -1,0 +1,320 @@
+<html ng-app="ibct-web">
+<head>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+<script type="text/javascript"
+	src="../javascript/ui-bootstrap-tpls-2.3.1.min.js"></script>
+<script src="../javascript/ibct-angular.js"></script>
+
+
+<style>
+.panel-body {
+	padding: 15px;
+}
+
+.table-border>tbody>tr>th {
+	padding: 12px;
+	border-top: 0px solid #ddd;
+	border: 3px solid #f2efeb;
+}
+
+.table-border>tbody>tr>td {
+	text-align: center;
+	border: 3px solid #f2efeb;
+}
+
+:disabled {
+	background-color: #CCD1D1;
+}
+</style>
+</head>
+
+<div class="row row-margin">
+	<div class="col-lg-12">
+		<!--  <h1 class="page-header">Dashboard</h1> -->
+
+	</div>
+	<!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row" ng-controller= "enginePackageController">
+	<div class="col-lg-12">
+		<h3 style="font-weight: bolder; margin-left: 14px;">Manage
+			Bulletins</h3>
+		<p style="margin-left: 14px; font-size: 14px;">Please select
+			Product line and Bulleting Type. Fields marked with asterisk (*) are
+			required.</p>
+	</div>
+	<div class="col-lg-12">
+		<div class="panel">
+			<div class="panel-heading" style="background-color: #F2EFEB;">
+				Bulletin Compliance By Package</div>
+			<div class="panel-body">
+				<table style="">
+					<tbody>
+
+
+
+						<tr>
+							<td style="width: 25%;"><label for="disabledSelect"><font
+									color="red">*</font>Product Line:</label></td>
+							<td style="width: 200px;"><select id="disabledSelect"
+								style="text-transform: uppercase;"
+								ng-model="enginePackageController.productLines"
+								ng-options="pl.productLine for pl in productLines track by pl.productLine"
+								ng-change="fillSerials()" class="form-control"><option
+										value="">select</option>
+							</select></td>
+
+							<td style="width: 25%;"><label for="disabledSelect"><font
+									color="red">*</font>Bulletin Type:</label></td>
+							<td style="width: 200px;"><select id="disabledSelect"
+								style="text-transform: uppercase;"
+								ng-model="enginePackageController.bulletinTypes"
+								ng-options="bl.codeDescription for bl in bulletinTypes track by bl.codeID"
+								ng-change="fillSerials()" class="form-control" style="""><option
+										value="">select</option></select></td>
+							
+						</tr>
+						<tr>
+							<td style=""><label for="disabledSelect"><font
+									color="red">*</font>Product Serial#:</label></td>
+							<td style=""><select id="disabledSelect"
+								class="form-control" ng-model="enginePackageController.productSerial"
+								ng-change="getEngineReport()"
+								ng-options = "sn.productSerialNum for sn in productSerials track by sn.productSerialNum"
+								><option value="">SELECT</option></select>
+							</td>
+							<td style=""></td>
+							<td style=""></td>
+							<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+
+						</tr>
+
+
+					</tbody>
+				</table>
+
+
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-12">
+		<div class="panel">
+			<div class="panel-heading" style="background-color: #F2EFEB;">
+				Product Details</div>
+			<div class="panel-body">
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td colspan="5" style=""></td>
+						</tr>
+						<tr>
+							<td><label>Product Line:</label></td>
+							<td colspan="">{{enginePackageController.productLines.productLine}}</td>
+							<td><label>Product Model:</label></td>
+							<td colspan="">{{engineDetails[0].productModelId}}</td>
+						</tr>
+						<tr>
+							<td><label>Product Serial#:</label></td>
+							<td>{{enginePackageController.productSerial.productSerialNum}}</td>
+							<td><label>Package Serial#:</label></td>
+							<td>{{engineDetails[0].parentSerialNum}}</td>
+						</tr>
+						<tr>
+							<td><label>Customer:</label></td>
+							<td>{{engineDetails[0].customerName}}</td>
+							<td><label>Site Name:</label></td>
+							<td>{{engineDetails[0].siteName}}</td>
+						</tr>
+						
+						<tr>
+								<td><label>First Fire Data:</label></td>
+							<td>{{engineDetails[0].firstFireDate}}</td>
+							<td><label>Operating Status:</label></td>
+							<td>{{engineDetails[0].operatingStatus}}</td>
+						</tr>
+
+						<tr>
+							<td><label>COD:</label></td>
+							<td>{{engineDetails[0].cod}}</td>
+						</tr>
+
+
+
+
+					</tbody>
+				</table>
+
+
+			</div>
+		</div>
+	</div>
+	<!-- <div class="col-lg-12">
+		<div class="panel">
+			<div class="panel-heading" style="background-color: #F2EFEB;">
+				Update Compliance </div>
+			<div class="panel-body">
+				<table class="">
+					<tbody>
+						<tr>
+							<td><label><font color="red">*</font>Compliance
+									Date:</label></td>
+							<td style=""><input type="date" ng-bind="ComplainceDate" id="updateCompliance" 
+								ng-model="enginePackageController.engineComplainceDate" value={{ComplainceDate}}
+								ng-disabled="complianceDateDisable"
+								class="form-control ng-binding" style="width: 100%;"></td>
+								</tr>
+								<tr>
+							<td style=""><label style=""><font color="red">*</font>Target
+									Compliance Date:</label></td>
+							<td style=""><input type="date" ng-bind="targetComplainceDate" id="updateCompliance"
+							ng-model="enginePackageController.engineTargetComplainceDate" ng-disabled="selectTCDLink"
+							value={{targetComplainceDate}} ng-change="disableOtherOption()"
+							
+								class="form-control ng-binding" style=""></td>
+								<td>or</td>
+								<td><label style="">Timing code 9:</label></td>
+								<td style="width:100%">
+								<select  id="updateCompliance"
+								 ng-change="disableOtherOption()"
+								class="form-control" ng-model="enginePackageController.TargetTimingCodeNine"
+								 ng-disabled="selectTCNLink"
+								
+								ng-options = "sn.codeDescription for sn in timingCodesNine  track by sn.codeID"
+								><option value="">SELECT</option></select></td>
+								</tr>
+								<tr>
+								<td>
+								<label style=""><font color="red">*</font>Target
+									Obtained Date:</label>
+								</td>
+								<td>
+								<input type="date" ng-bind="TargetObatinedDate" id="updateCompliance"
+								ng-model="enginePackageController.engineTargetObtainedDate"
+								ng-disabled="targetObtainedDateDisable"
+								ng-bind="targetObtainedDate" value="{{targetObtainedDate}}"
+								
+								class="form-control ng-binding" style="">
+								</td>
+								</tr>
+							<td style=""><button type="button" ng-disabled="disableUpdateButton" ng-click = "updateDateInTable()"class="btn btn-ge">Update</button></td>
+							<td style=""><button type="button" ng-disabled="disableUpdateButton" class="btn btn-ge" ng-click="clearUpdate()">Clear</button></td>
+						</tr>
+					</tbody>
+				</table>
+
+
+			</div>
+		</div>
+	</div> -->
+	<!-- /.col-lg-4 -->
+
+	<!-- <div class="row"> -->
+
+	<!-- </div> -->
+	<div class="col-lg-12">
+		<div class="panel">
+			<div class="panel-heading" style="background-color: #F2EFEB;">Report </div>
+			<div class="panel-body">
+				<table class="table">
+					<tbody>
+						<tr>
+							<!-- <td><label>Select</label></td> -->
+							<td><label>Bulletin#</label></td>
+							<td><label>Revision</label></td>
+							<td style="width: 30%; text-align: center;"><label>Title</label></td>
+							<td><label>Category</label></td>
+							<td><label>Level</label></td>
+							<td><label>Timing</label></td>
+							<td><label>Significant</label></td>
+							<td><label>Voucher</label></td>
+							<td><label>Compliance Date</label></td>
+							<td><label>Target Compliance Date</label></td>
+							<td><label>Target Obtained Date</label></td>
+						</tr>
+						<tr ng-model="EngineReportData"
+								dir-paginate="bulletin in engineReport| itemsPerPage: pageSize" current-page="currentPage">
+							<!-- <td><input type="radio" name="bulletin"  ng-checked="false" ng-model="enginePackageController.bulletinRadioSelected"
+							ng-click="displayComplianceDetails($index)"/></td> -->
+							<td>{{bulletin.bulletinNum}}</td>
+							<td>{{bulletin.bulletinRevision}}</td>
+							<td >{{bulletin.bulletinDesc}}</td>
+							<td>{{bulletin.categoryCode}}</td>
+							<td>{{bulletin.complianceLevel}}</td>
+							<td>{{bulletin.timingCode}}</td>
+							<td>{{bulletin.significantInd}}</td>
+							<td>{{bulletin.voucherProgramInd}}</td>
+							<td>{{bulletin.compliedDate}}</td>
+							<td>{{bulletin.targetComplianceDate}}</td>
+							<td>{{bulletin.dateTargetObtained}}</td>
+						</tr>
+						<tr>
+
+						</tr>
+					</tbody>
+				</table>
+				<div class="col-lg-6" style="padding-left: 0px;">
+					<table style="background-color: #fff; border: none;">
+						<tbody>
+							<tr>
+								<td style="background-color: #fff; border: none;">
+									<button id="export" ng-disabled ="disabledButtons" ng-click="export()"class="btn btn-ge btn-width">Export</button>
+
+									<!-- <button id="save" ng-disabled ="disabledButtons" class="btn btn-ge btn-width" ng-click="updateCompliance()">Save</button> -->
+<button id="cancel" ng-click="printEngineReport()" class="btn btn-ge btn-width">Print</button>
+									<button id="cancel" ng-click="close()" class="btn btn-ge btn-width">Close</button>
+
+								</td>
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+
+	<!-- /.col-lg-4 -->
+	<div class="col-lg-12">
+		<!-- <div class="panel panel-success">
+                        <div class="panel-heading">
+                            Success Panel
+                        </div>
+                        <div class="panel-body">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+                        </div> -->
+		<!--  <div class="panel-footer">
+                            Panel Footer
+                        </div> -->
+		<!-- </div> -->
+	</div>
+	<!-- /.col-lg-4 -->
+	<div ng-controller="OtherController" class="other-controller">
+					
+					<div class="text-center">
+						<dir-pagination-controls boundary-links="true"
+							on-page-change="pageChangeHandler(newPageNumber)"
+							template-url="../template/dirPagination.tpl.html"></dir-pagination-controls>
+					</div>
+				</div>
+				<div class="col-lg-6">
+		<div class="panel">
+			<div class="panel-heading" style="background-color: #F2EFEB;">LEGEND</div>
+			<div class="panel-body">
+				<table class="table">
+				<th>Implementation Timing</th><th>Timing Code</th>
+				<tr ng-repeat="time in timing">
+				<td>{{time.codeName}}</td><td>{{time.codeDescription}}</td>
+				</tr>
+				</table>
+				</div>
+				</div>
+				</div>
+</div>
+
+				
+</html>

@@ -1,0 +1,59 @@
+<html ng-app="ibct-web">
+<head>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+<script type="text/javascript"
+	src="../javascript/ui-bootstrap-tpls-2.3.1.min.js"></script>
+<script src="../javascript/ibct-angular.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.1/angular-material.js">
+	</script>
+
+<style>
+.tempWidth {
+	width: 100%;
+}
+
+label {
+	font-size: 14px;
+	color:blue;
+}
+</style>
+</head>
+<body>
+<div ng-controller="userController">
+<br><br>
+<table >
+
+
+<tr>
+<td ><label>Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</label></td>
+<td> {{userData.userName}}</td>
+</tr>
+
+<tr>
+<td><label>eMail&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  :</label></td>
+<td>{{userData.emailId}}</td>
+</tr>
+
+<tr>
+<td><label>Role&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :</label></td>
+<td ng-if="userData.roleId=='1'">CCT ADMIN</td>
+<td ng-if="userData.roleId=='2'">CCT USER</td>
+<td ng-if="userData.roleId=='3'">IT ADMIN</td>
+</tr>
+
+<tr>
+<td><label>Location&nbsp; :</label></td>
+<td>{{userData.location}}</td>
+</tr>
+
+<tr>
+<td><label>City&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</label></td>
+<td>{{userData.city}}</td>
+</tr>
+</table>
+
+</div>
+</body>
+</html>

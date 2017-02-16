@@ -22,6 +22,10 @@
 	text-align: center;
 	border: 3px solid #f2efeb;
 }
+
+:disabled {
+	background-color: #CCD1D1;
+}
 </style>
 </head>
 
@@ -37,6 +41,9 @@
 	<div class="col-lg-12">
 		<h3 style="font-weight: bolder; margin-left: 14px;">Manage
 			Bulletins</h3>
+		<p style="font-weight: bolder; margin-left: 14px;" ><font color="green" ng-bind="successMsg"><label>{{successMsg}}</label></font></p>
+		<p style="font-weight: bolder; margin-left: 14px;"><font color="red" ng-bind="failureMsg">There was an error while adding the new bulletin. Please contact your administrator</font></p>
+		
 		<p style="margin-left: 14px; font-size: 14px;">Please select
 			Product line and Bulleting Type. Fields marked with asterisk (*) are
 			required.</p>
@@ -61,9 +68,9 @@
 											value="">select</option>
 								</select></td>
 
-								<td style=""><label for="disabledSelect"><font
+								<td style="width: 25%;"><label for="disabledSelect"><font
 										color="red">*</font>Bulletin Type:</label></td>
-								<td style="width: 21%;"><select id="disabledSelect"
+								<td style="width: 200px;"><select id="disabledSelect"
 									style="text-transform: uppercase;"
 									ng-model="updateController.bulletinTypes"
 									ng-options="bl.codeDescription for bl in bulletinTypes track by bl.codeID"
@@ -76,7 +83,6 @@
 										color="red">*</font>Bulletin:</label></td>
 								<td style=""><select
 									style="width: 100%; text-transform: uppercase;"
-									ng-disabled="formLink"
 									ng-model="updateController.bulletinNumbers"
 									ng-change="changeBulletinRevisions(updateController.bulletinNumbers.bulletinNum)"
 									ng-options="bulletin.bulletinNum for bulletin in bulletinNumbers track by bulletin.bulletinNum"
@@ -145,11 +151,12 @@
 								<th>Track<br />Implementation Plan
 								</th>
 							</tr>
-							<tr ng-model="revisions" ng-repeat="rev in revisions">
+							<tr ng-model="revisions"
+								ng-repeat="rev in uniqueRevisions|orderBy:'-revision':true">
 								<td><input type="radio" name="revisions" autocomplete="off"
-									ng-click="changeRevision(rev)"
+									ng-click="changeRevision(rev)" checked="checkFirstRevision"
 									id="{{rev.bulletinNum +'|'+ rev.revisionId +'|'+ rev.timingCode}}"></td>
-								<td>{{rev.revisionId}}</td>
+								<td>{{rev.revision}}</td>
 								<td>{{rev.revisionDate| date:'yyyy/MM/dd'}}</td>
 								<td>{{rev.revisionDescription}}</td>
 								<td>{{rev.category}}</td>
@@ -171,12 +178,15 @@
 				<div class="panel">
 					<div class="panel-heading" style="background-color: #F2EFEB;">
 						Editable Bulletin Details</div>
+
+
 					<div class="panel-body">
 						<table class="" style="width: 100%;">
 
 
 							<tbody>
 								<tr>
+
 									<td><table
 											style="border: 1px solid rgba(242, 239, 235, 0.98);
 	/* margin-top: 25px; */ width: 100%;
@@ -185,17 +195,29 @@
 	/* box-shadow: 2px 2px 2px 1px rgba(47, 156, 228, 0.66); */ box-shadow: 2px 2px 2px 2px rgba(152, 135, 146, 0.45);">
 											<tbody>
 												<tr>
+													<td><label>New Revision:&nbsp;&nbsp;&nbsp;</label> <input
+														type="checkbox" checked="false"
+														ng-model="updateController.newRevision"
+														ng-disabled="newRevLink" ng-change="makeRevEditable()">
+
+
+													</td>
+												</tr>
+												<tr>
+
 													<td><label><font color="red">*</font>Revision:</label></td>
 													<td style="width: 25%;"><input type="textbox"
 														class="form-control" ng-model="changedRevision.revision"
+														disabled="disabled" pattern="[0-9]{1,20}" maxlength="20"
 														text="{{changedRevision.revision}}" ng-disabled="formlink"
-														required name="revision">
-														<div ng-messages="updateBulletin.revision.$error"></div></td>
+														required name="revision" ng-readonly="editableRev">
+													</td>
 													<td><label><font color="red">*</font>Description:<label></label></label></td>
 													<td><input type="textbox" class="form-control"
 														text="{{changedRevision.revisionDescription}}"
-														ng-bind="revisionDate" value={{revisionDate}}
-														ng-change="dateCheck(changedRevision.revisionDate)"
+														pattern="[A-Za-z0-9!@#$%^&*()-_=+/ ~,.]{1,150}"
+														title="special characters are not allowed" maxlength="150"
+														style="text-transform: uppercase"
 														ng-model="changedRevision.revisionDescription"
 														ng-disabled="formlink" required name="description">
 														<div ng-messages="updateBulletin.description.$error"></div>
@@ -224,7 +246,7 @@
 														ng-disabled="formlink"
 														style="width: 100%; text-transform: uppercase;"
 														ng-model="changedRevision.complianceLevel"
-														ng-options="cl.codeID as [cl.codeID,cl.compLevel].join(' - ') for cl in complianceLevel track by cl.codeID"
+														ng-options="cl.codeID as [cl.codeID,cl.compLevel].join(' - ') for cl in complianceLevel"
 														required name="compLevel"><option value="">select</option></select>
 														<div ng-messages="updateBulletin.compLevel.$error"></div>
 													</td>
@@ -249,7 +271,7 @@
 														style="width: 100%; text-transform: uppercase;"
 														ng-model="updateController.timingSelected" ng-multi-select
 														ng-options="t.codeName +' - '+ t.codeDescription disable when t.isdisabled for t in timing track by t.codeID"
-														ng-disabled="formlink" required name="timing">
+														ng-disabled="true" name="timing">
 
 													</select>
 														<div ng-messages="updateBulletin.timing.$error"></div></td>
@@ -259,8 +281,11 @@
 												<tr>
 													<td><label><font color="red">*</font>Rev Date:</label></td>
 													<td colspan="2"><input type="date" style="width: 30%"
-														class="ng-binding form-control"
+														class="ng-binding form-control" min="1950-01-01"
+														max="2100-12-31" ng-bind="RevisionDate"
+														value={{RevisionDate}}
 														ng-model="changedRevision.revisionDate"
+														ng-change=dateCheck(changedRevision.revisionDate)
 														ng-disabled="formlink" required name="revDate">
 														<div ng-messages="updateBulletin.revDate.$error"></div></td>
 
@@ -268,47 +293,17 @@
 
 
 
-												<tr>
-													<td colspan="8"><table width="100%">
-															<tr>
-																<td><label>Voucher
-																		Program:&nbsp;&nbsp;&nbsp;</label><input type="checkbox"
-																	ng-checked="changedRevision.voucherProgram==Y"
-																	ng-true-value="'Y'" ng-false-value="'N'"
-																	ng-model="changedRevision.voucherProgram"
-																	ng-disabled="formlink"></td>
-																<td><label>Field Implementation
-																		Metric:&nbsp;&nbsp;&nbsp;</label><input type="checkbox"
-																	ng-checked="changedRevision.fieldImplimentationMetric==Y"
-																	ng-true-value="'Y'" ng-false-value="'N'"
-																	ng-model="changedRevision.fieldImplimentationMetric"
-																	ng-disabled="formlink" /></td>
-																<td><label>Track Implementation
-																		Plan:&nbsp;&nbsp;&nbsp;</label><input type="checkbox"
-																	ng-checked="changedRevision.trackImplimentationPlan==Y"
-																	ng-true-value="'Y'" ng-false-value="'N'"
-																	ng-model="changedRevision.trackImplimentationPlan"
-																	ng-disabled="formlink" /></td>
 
-																<td><label>Significant:&nbsp;&nbsp;&nbsp;</label><input
-																	type="checkbox"
-																	ng-checked="changedRevision.significant==Y"
-																	ng-true-value="'Y'" ng-false-value="'N'"
-																	ng-model="changedRevision.significant"
-																	ng-disabled="formlink" /></td>
-																<td><label>New Revision:&nbsp;&nbsp;&nbsp;</label><input
-																	type="checkbox" ng-model="updateController.newRevision"
-																	ng-disabled="formlink"></td>
-															</tr>
-														</table></td>
-
-
-												</tr>
 
 												<tr>
 													<td><label>Remarks:</label></td>
 													<td colspan="7"><textarea class="form-control"
-															ng-model="changedRevision.remarks" ng-disabled="formlink"></textarea></td>
+															style="width: 100%; overflow: auto; resize: none;"
+															ng-model="changedRevision.remarks" ng-disabled="formlink"
+															maxlength="250"
+															pattern="[A-Za-z0-9!@#$%^&*()-_=+/ ~,.]{1,250}"
+															style="text-transform: uppercase"
+															title="special characters are not allowed"></textarea></td>
 
 												</tr>
 
@@ -322,6 +317,34 @@
 					</div>
 				</div>
 			</div>
+			<div class="panel">
+				<div class="col-lg-12">
+					<div class="col-lg-6">
+						<table class="table-border" style="width: 100%;">
+							<th colspan="2"><label>Select</label></th>
+							<th colspan="2"><label>Timing Code</label></th>
+							<th colspan="2"><label>Compliance End Date</label></th>
+							<tr ng-repeat="sn in uniqueTimingCode |orderBy:sn">
+								<td colspan="2"><input type="radio" name="sn"
+									value="{{sn}}" ng-click="selectedTimingCode(sn)">&nbsp;&nbsp;<!-- <label>Timing
+										Code</label> --></td>
+
+								<td colspan="2">{{sn.timingCode}}</td>
+
+
+								<td colspan="2"><input value={{sn.complianceEndDate}}
+									type="date" pattern="yyyy/dd/mm" style="width: 100%"
+									class="ng-binding form-control" ng-disabled="formlink"
+									ng-model="changedRevision.complianceEndDate"></td>
+
+							</tr>
+
+
+						</table>
+					</div>
+				</div>
+			</div>
+
 			<!-- <div class="row"> -->
 			<div class="col-lg-12">
 				<div class="panel panel-blue">
@@ -339,15 +362,14 @@
 										<td style="width: 47%;"><select name="num" multiple
 											size="4" style="width: 100%;"
 											ng-model="updateController.fromSN"
-											ng-options="fsn for fsn in fromSN track by fsn"
-											ng-disabled="formlink" required
+											ng-options="fsn for fsn in fromSN| orderBy: fsn track by fsn"
+											ng-disabled="formlink"
 											ng-change="disableTo(updateController.fromSN)">
 												<option>select</option>
 												<option>select</option>
 												<option>select</option>
 												<option>select</option>
-										</select>
-											<div ng-messages="updateBulletin.num.$error"></div></td>
+										</select></td>
 										<td>
 											<table>
 												<tbody>
@@ -355,13 +377,14 @@
 														<td>
 															<button type="button" class="btn btn-ge btn-width"
 																ng-click="addSN(updateController.fromSN,updateController.toSN)"
-																ng-disabled="formLink">Add</button>
+																ng-disabled="serialAddButtonLink">Add</button>
 														</td>
 													</tr>
 													<tr>
 														<td>
 															<button type="button" class="btn btn-ge btn-width"
-																ng-disabled="formLink" ng-click="clearSerialNo()">Clear</button> <!-- <button id="save" style="background: url('../images/add_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button>
+																ng-disabled="serialClearButtonLink"
+																ng-click="clearSerialNo()">Clear</button> <!-- <button id="save" style="background: url('../images/add_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button>
                                   <br/>
                                   <button id="save" style="background: url('../images/clear_off.gif');    background-size: initial;    width: 70px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button> -->
 														</td>
@@ -371,7 +394,7 @@
 										</td>
 										<td style="width: 47%;"><select name="num" size="4"
 											style="width: 100%;" ng-model="updateController.toSN"
-											ng-options="tsn for tsn in toSN track by tsn"
+											ng-options="tsn for tsn in toSN| orderBy: tsn track by tsn"
 											ng-disabled="multiFromSerial">
 												<option>select</option>
 												<option>select</option>
@@ -391,11 +414,15 @@
 								<tbody>
 									<tr>
 										<td><label>select</label></td>
+										<td><label>Timing Code</label></td>
 										<td><label>From Serial#:</label></td>
 										<td><label>To Serial#:</label></td>
 									</tr>
-									<tr ng-repeat="item in serialNumber">
-										<td><input type="checkbox"></td>
+									<tr
+										ng-repeat="item in serialNumber|filter:filterSerial(selectedRev)">
+										<td><input type="checkbox" ng-model="item.isClicked"
+											ng-disabled="item.isDisabled" ng-change="checkedIndex(item)"></td>
+										<td>{{item.timingCode}}</td>
 										<td>{{item.fromSNum}}</td>
 										<td>{{item.toSNum}}</td>
 									</tr>
@@ -403,7 +430,7 @@
 										<td colspan="3" style="border: none;">
 											<button id="delete" class="btn btn-ge btn-width"
 												type="button" ng-click="removeItem($index)"
-												ng-disabled="formlink">Delete</button> <!-- <button id="save" style="background: url('../images/delete_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button> -->
+												ng-disabled="serialDeleteButtonLink">Delete</button> <!-- <button id="save" style="background: url('../images/delete_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button> -->
 											<!-- <img src="../images/clear_off.gif"//> -->
 										</td>
 									</tr>
@@ -423,12 +450,11 @@
 					<button id="clear" style="background: url('../images/clear_off.gif');    background-size: initial;    width: 70px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button>
 					<button id="close" style="background: url('../images/close_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button> -->
 								<button id="save" class="btn btn-ge btn-width" type="submit"
-									ng-disabled="saveDisabled">Save</button>
-								<button id="clear" class="btn btn-ge btn-width" type="button"
-									ng-click="clearFormControlFields()" ng-disabled="formlink">Clear</button>
+									ng-disabled="formlink">Save</button>
+
 								<button id="cancel" type="button" class="btn btn-ge btn-width"
 									ng-disabled="formlink">
-									<a href="#/"> Cancel </a>
+									<a href="#welcome"> Cancel </a>
 								</button>
 							</td>
 						</tr>
@@ -439,21 +465,9 @@
 		</div>
 	</form>
 	<!-- /.col-lg-4 -->
-	<div class="col-lg-12">
-		<!-- <div class="panel panel-success">
-                        <div class="panel-heading">
-                            Success Panel
-                        </div>
-                        <div class="panel-body">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
-                        </div> -->
-		<!--  <div class="panel-footer">
-                            Panel Footer
-                        </div> -->
-		<!-- </div> -->
-	</div>
-	<!-- /.col-lg-4 -->
+	<div class="col-lg-12"></div>
+
 </div>
-<!-- /.row -->
+
 
 </html>

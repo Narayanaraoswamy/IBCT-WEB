@@ -3797,7 +3797,7 @@ jQuery.readyException = function( error ) {
 
 
 
-// The deferred used on DOM ready
+/*// The deferred used on DOM ready
 var readyList = jQuery.Deferred();
 
 jQuery.fn.ready = function( fn ) {
@@ -3813,7 +3813,7 @@ jQuery.fn.ready = function( fn ) {
 		} );
 
 	return this;
-};
+};*/
 
 jQuery.extend( {
 

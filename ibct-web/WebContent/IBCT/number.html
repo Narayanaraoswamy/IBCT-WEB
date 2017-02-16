@@ -1,0 +1,218 @@
+<html ng-app="ibct-web">
+<head>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+<script type="text/javascript"
+	src="../javascript/ui-bootstrap-tpls-2.3.1.min.js"></script>
+<script src="../javascript/ibct-angular.js"></script>
+
+
+<style>
+.panel-body {
+	padding: 15px;
+}
+
+.table-border>tbody>tr>th {
+	padding: 12px;
+	border-top: 0px solid #ddd;
+	border: 3px solid #f2efeb;
+}
+
+.table-border>tbody>tr>td {
+	text-align: center;
+	border: 3px solid #f2efeb;
+}
+
+:disabled {
+	background-color: #CCD1D1;
+}
+</style>
+</head>
+<div class="row" ng-controller="numberController">
+			<div class="col-lg-12"><h3 style="
+    font-weight: bolder;
+    margin-left: 14px;
+">Manage Bulletins</h3><p style="    margin-left: 14px;    font-size: 14px;">Please select Product line and Bulleting Type. Fields marked with asterisk (*) are required.</p></div>
+<div class="col-lg-12">
+                    <div class="panel">
+					<div class="panel-heading" style="    background-color: #F2EFEB;">
+                           Bulletin Compliance By Number
+                        </div>
+                  					   
+                            
+											
+						
+							<div class="col-lg-12">
+			<div class="panel">
+			
+				<div class="panel-body">
+					<table style="">
+						<tbody>
+							<tr>
+								<td style=""><label for="disabledSelect"><font
+										color="red">*</font>Product Line:</label></td>
+								<td style="width: 200px;"><select id="disabledSelect"
+									style="text-transform: uppercase;"
+									ng-model="numberController.productLines"
+									ng-options="pl.productLine for pl in productLines track by pl.productLine"
+									ng-change="fillBulletins()" class="form-control"><option
+											value="">select</option>
+								</select></td>
+
+								<td style=""><label for="disabledSelect"><font
+										color="red">*</font>Bulletin Type:</label></td>
+								<td style="width: 200px;"><select id="disabledSelect"
+									style="text-transform: uppercase;"
+									ng-model="numberController.bulletinTypes"
+									ng-options="bl.codeDescription for bl in bulletinTypes track by bl.codeID"
+									ng-change="fillBulletins()" class="form-control" style="""><option
+											value="">select</option></select></td>
+								<td style=""></td>
+							</tr>
+							<tr>
+								<td style=""><label for="disabledSelect"><font
+										color="red">*</font>Bulletin:</label></td>
+								<td style=""><select
+									style="width: 200px; text-transform: uppercase;"
+									ng-model="numberController.bulletinNumbers"
+									ng-change="changeBulletinRevisions(numberController.bulletinNumbers.bulletinNum)"
+									ng-options="bulletin.bulletinNum for bulletin in bulletinNumbers track by bulletin.bulletinNum"
+									class="form-control"><option value="">select</option></select>
+
+								</td>
+								<td style=""><label for="disabledSelect">Status:</label></td>
+								<td style="">{{numberController.bulletinNumbers.bulletinStatus}}</td>
+								<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+                </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="panel">
+					<div class="panel-heading" style="    background-color: #F2EFEB;">
+                           Bulletin
+                        </div>
+			<div class="panel-body">
+				<table style="">
+					<tbody>
+						<tr>
+							<td colspan="5" style=""></td>
+						</tr>
+						<tr>
+							<td><label>Bulletin#:</label></td>
+							<td colspan="">{{complainceNumberDetails[0].bulletinNum}}</td>
+							<td></td>
+							<td><label>Product Line:</label></td>
+							<td>{{numberController.productLines.productLine}}</td>
+						</tr>
+						<tr>
+							<td><label>Title:</label></td>
+							<td>{{complainceNumberDetails[0].bulletinDesc}}</td>
+						</tr>
+						<tr>
+							<td><label>Category:</label></td>
+							<td>{{complainceNumberDetails[0].categoryCode}}</td>
+							<td></td>
+							<td><label>Significant</label></td>
+							<td>{{complainceNumberDetails[0].significantInd}}</td>
+						</tr>
+						<tr>
+							<td><label>Timing:</label></td>
+							<td>{{complainceNumberDetails[0].timingCode}}</td>
+							<td></td>
+							<td><label>Voucher Program:</label></td>
+							<td>{{complainceNumberDetails[0].voucherProgramInd}}</td>
+						</tr>
+						<tr>
+							<td><label>Compliance Level:</label></td>
+							<td>{{complainceNumberDetails[0].complianceLevel}}</td>
+							<td></td>
+							<td><label>Field Implemation Metric:</label></td>
+							<td>{{complainceNumberDetails[0].fieldImplMetricInd}}</td>
+						</tr>
+
+
+					</tbody>
+				</table>
+
+
+			</div>
+		</div>
+                </div><div class="col-lg-12">
+                    <div class="panel">
+					<div class="panel-heading" style="    background-color: #F2EFEB;">Product Details</div>
+                       <div class="panel-body">		
+<table class="table">
+				   <tbody><tr>
+				   <td><label>Product Serial#</label></td>
+						<td><label>Compliance Date</label></td>
+						<td><label>Target Compliance Date</label></td>	
+					</tr>
+					<tr ng-model="EngineReportData"
+								dir-paginate="bulletin in complainceNumber| itemsPerPage: pageSize" current-page="currentPage">
+					<td>
+				{{bulletin.productSerialNum}}
+					</td>
+					<td>
+					{{bulletin.compliedDate}}
+					</td>
+					<td>
+					{{bulletin.targetComplianceDate}}
+					</td>
+					</tr>
+					
+				   </tbody></table>
+<div class="col-lg-6" style="
+    padding-left: 0px;
+">
+			<table style="background-color: #fff;    border: none;">
+			<tbody><tr>
+			<td style="background-color: #fff;    border: none;">			
+					<button id="export" ng-click="export()" ng-disabled="disableExport" class="btn btn-ge btn-width">Export</button>
+
+					<button id="cancel" ng-click="closeNumberController()" class="btn btn-ge btn-width">Close</button>
+					</td>
+			</tr>
+			
+			</tbody></table>
+			</div>					   
+                            
+											
+							</div>
+                </div>
+                </div>
+                <!-- /.col-lg-4 -->
+                
+				<!-- <div class="row"> -->
+                
+<!-- </div> -->
+				
+                <!-- /.col-lg-4 -->
+                <div class="col-lg-12">
+                    <!-- <div class="panel panel-success">
+                        <div class="panel-heading">
+                            Success Panel
+                        </div>
+                        <div class="panel-body">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+                        </div> -->
+                       <!--  <div class="panel-footer">
+                            Panel Footer
+                        </div> -->
+                    <!-- </div> -->
+                </div>
+                <!-- /.col-lg-4 -->
+            </div>
+            <div ng-controller="OtherController" class="other-controller">
+					
+					<div class="text-center">
+						<dir-pagination-controls boundary-links="true"
+							on-page-change="pageChangeHandler(newPageNumber)"
+							template-url="../template/dirPagination.tpl.html"></dir-pagination-controls>
+					</div>
+				</div>
+            </html>

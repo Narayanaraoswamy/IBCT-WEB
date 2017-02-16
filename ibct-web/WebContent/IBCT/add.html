@@ -5,34 +5,15 @@
 <script type="text/javascript"
 	src="../javascript/ui-bootstrap-tpls-2.3.1.min.js"></script>
 <script src="../javascript/ibct-angular.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.1/angular-material.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.1/angular-material.js">
+	</script>
 
-<script type="text/javascript">
-	/*	$(document).ready(function() {   
-	 setHeight();
-	 $('#timeID').change(function() {
-	 console.log($(this).val());
-	 }).multipleSelect({
-	 width: '100%'
-	 });
-	 });
-
-	 $(window).resize(function() {
-	 setHeight();   
-	 }); 
-
-	 function setHeight() {
-	 windowHeight = $('#page-wrapper').innerHeight();
-	 //$('.contentBG').css('min-height', windowHeight);   
-	 console.log(windowHeight);
-	 $('.sidebar').css({'min-height':windowHeight,'background-color':'rgb(47, 156, 228)'});
-	 }
-	 */
-</script>
 <style>
 .tempWidth {
 	width: 100%;
 }
+
 
 label {
 	font-size: 14px;
@@ -41,18 +22,18 @@ label {
 </head>
 
 <div class="row row-margin">
-	<div class="col-lg-12">
-		<!--  <h1 class="page-header">Dashboard</h1> -->
+	<div class="col-lg-12"></div>
 
-	</div>
-	<!-- /.col-lg-12 -->
 </div>
-<!-- /.row -->
+
 
 <div class="row" ng-controller="addController">
+
 	<div class="col-lg-12">
 		<h3 style="font-weight: bolder; margin-left: 14px;">Manage
 			Bulletins</h3>
+		<p style="font-weight: bolder; margin-left: 14px;" ><font color="green" ng-bind="successMsg"><label>{{successMsg}}</label></font></p>
+		<p style="font-weight: bolder; margin-left: 14px;"><font color="red" ng-bind="failureMsg">There was an error while adding the new bulletin. Please contact your administrator</font></p>
 		<p style="margin-left: 14px; font-size: 14px;">Please select
 			Product line and Bulleting Type. Fields marked with asterisk (*) are
 			required.</p>
@@ -78,13 +59,6 @@ label {
 
 								<td style="width: 19%;"><label for="disabledSelect"><font
 										color="red">*</font>Bulletin Type:</label></td>
-								<!--<td style="width: 28%;"><select id="disabledSelect"
-								ng-model="addController.bulletinTypes"
-								ng-options="bl.bulletinType for bl in bulletinTypes track by bl.bulletinType"
-								ng-change="enableButton()" class="form-control" style=""><option
-										value="">select</option></select></td>-->
-
-
 								<td style="width: 28%;"><select id="disabledSelect"
 									ng-model="addController.bulletinTypes"
 									ng-options="bl for bl in bulletinTypes track by bl"
@@ -128,35 +102,29 @@ label {
 				<div class="panel-body">
 					<table class="tempWidth">
 						<tbody>
-							<!-- <tr>
-				  <td><label>Bulletin Type:</label></td>
-				  <td>Prdouct</td>
-				  <td><label>Product Line:</label></td>
-				  <td>TM2500</td><td></td>
-				  </tr> -->
-							<!--  <tr><td> -->
+
 							<tr>
 								<td style="">
 									<table
-										style="border: 1px solid rgba(242, 239, 235, 0.98);
-	/* margin-top: 25px; */ width: 100%;
-	/* border: 1px solid rgba(47, 156, 228, 0.66); */
-	/* margin-top: 26px; */
-	/* box-shadow: 2px 2px 2px 1px rgba(47, 156, 228, 0.66); */ box-shadow: 2px 2px 2px 2px rgba(152, 135, 146, 0.45);">
+										style="border: 1px solid rgba(242, 239, 235, 0.98); width: 100%; box-shadow: 2px 2px 2px 2px rgba(152, 135, 146, 0.45);">
 										<tbody>
 											<tr>
 												<td style="width: 15%;"><label><font
 														color="red">*</font>Bulletin#:</label></td>
-												<td style="width: 25%;"><input type="textbox"
+												<td style="width: 25%;"><input type="textbox" style="text-transform: uppercase"
 													ng-model="addController.bulletin" ng-disabled="formLink"
 													class="form-control" required name="bulletinNum"
-													maxlength="20">
+													pattern="[A-Za-z0-9]{3,8}-[A-Za-z]{2,8}-[0-9]{1,5}|[A-Za-z]{1,2}-[A-Z0-9a-z]{3,8}-[A-Za-z]{2,8}-[0-9]{1,8}"
+													
+													title="e.g: LMXXXX-IND-201 or PB-LMXXXX-IND-201"
+													maxlength="50">
 													<div ng-messages="addBulletin.bulletinNum.$error"></div></td>
 												<td style="width: 21%;"><label><font
 														color="red">*</font>Revision:</label></td>
 												<td style="width: 26%;"><input type="textbox"
-													ng-model="addController.revision" ng-disabled="formLink"
-													class="form-control" required name="revision">
+													ng-model="addController.revision" pattern="[0-9]{1,20}"
+													ng-disabled="formLink" class="form-control" required
+													name="revision" maxlength="20" title="Only Digits are Allowed">
 													<div ng-messages="addBulletin.revision.$error"></div></td>
 											</tr>
 
@@ -165,7 +133,10 @@ label {
 												<td><label><font color="red">*</font>Description:</label></td>
 												<td><input type="textbox" ng-disabled="formLink"
 													ng-model="addController.description" class="form-control"
-													required name="description">
+													required name="description"
+													  style="text-transform: uppercase"
+													pattern="[A-Za-z0-9 !@#$%^&*()-_=+/ ~`,.]{1,150}"
+													title="Special Characters are not Allowed" maxlength="150">
 													<div ng-messages="addBulletin.description.$error"></div></td>
 												<td><label>Supercedes:</label></td>
 												<td><select style="width: 100%;" ng-disabled="formLink"
@@ -196,88 +167,96 @@ label {
 
 
 										</tbody>
-									</table> <!-- </td></tr> -->
+									</table>
 									<table
-										style="width: 100%;
-	/* border: 1px solid rgba(47, 156, 228, 0.66); */ margin-top: 26px; box-shadow: 2px 2px 2px 2px rgba(152, 135, 146, 0.45);">
+										style="width: 100%; margin-top: 26px; box-shadow: 2px 2px 2px 2px rgba(152, 135, 146, 0.45);">
 										<tbody>
-											<tr>
+
+											<tr ng-switch on="selectionSwitch">
 												<td><label><font color="red">*</font>Timing:</label></td>
-												<td colspan="7"><select id="timeID" multiple="multiple"
-													class="form-control" size="5"
-													style="width: 100%; text-transform: uppercase;"
+
+
+												<td colspan="7" ng-switch-when="false"><select
+													id="timeID" multiple="multiple" class="form-control"
+													size="5" style="width: 100%; text-transform: uppercase;"
 													ng-model="addController.timing" ng-multi-select
+													ng-change="loadTimingCodeName()"
 													ng-options="t.codeName +' - '+ t.codeDescription for t in timing track by t.codeID"
 													ng-disabled="formLink" required name="timing">
 
 												</select>
 													<div ng-messages="addBulletin.timing.$error"></div></td>
 
+
+												<td colspan="7" ng-switch-when="true"><select
+													id="timeID" class="form-control" size="5"
+													style="width: 100%; text-transform: uppercase;"
+													ng-model="addController.timing"
+													ng-change="loadTimingCodeName()"
+													ng-options="t.codeName +' - '+ t.codeDescription for t in timing track by t.codeID"
+													required name="timing">
+
+												</select>
+													<div ng-messages="addBulletin.timing.$error"></div></td>
+
+
+
+
 											</tr>
 
 											<tr>
-												<!--  ng-change="return dateCheck(addController.revDate)" -->
+
 												<td><label><font color="red">*</font>Rev Date:</label></td>
 												<td colspan="2" style=""><input type="date"
-													ng-bind="RevisionDate" ng-disabled="formLink"
+													min="1950-01-01" max="2100-12-31" ng-bind="RevisionDate"
+													ng-disabled="formLink" required="required"
 													value={{RevisionDate}} class="form-control ng-binding"
 													ng-model="addController.revDate" style="width: 100%;"
-													ng-change="dateCheck(addController.revDate)">
-													
-													
-											  </td>
+													ng-change="dateCheck(addController.revDate)"
+													autofocus="autofocus"></td>
 												<td style=""><label style=""><font color="red">*</font>Issue
 														Date:</label></td>
 												<td style="" colspan="4"><input type="date"
-													ng-bind="IssueDate" ng-disabled="formLink"
+													id="datepicker" ng-bind="IssueDate" ng-disabled="formLink"
+													min="1950-01-01" max="2100-12-31"
 													class="form-control ng-binding" value={{IssueDate}}
 													ng-model="addController.issueDate"
 													ng-change="dateCheck(addController.issueDate)"
-													style="float: right; width: 67%;"></td>
+													style="float: right; width: 67%;" required="required"></td>
 											</tr>
 
-											<tr style="">
-												<td><label><font color="red">*</font>Voucher
-														Program:</label></td>
-												<td style=""><input type="checkbox" ng-true-value="'Y'"
-													ng-false-value="'N'" ng-disabled="formLink"
-													ng-model="addController.voucherProgram" /></td>
-												<td><label><font color="red">*</font>Field
-														Implementation Metric:</label></td>
-												<td style=""><input type="checkbox" ng-true-value="'Y'"
-													ng-false-value="'N'"
-													ng-model="addController.fieldImplementationMetric"></td>
-												<td><label>Track Implementation Plan:</label></td>
-												<td><input type="checkbox" ng-true-value="'Y'"
-													ng-false-value="'N'"
-													ng-model="addController.trackImplementationPlan"></td>
-												<td><label>Significant:</label></td>
-												<td><input type="checkbox" ng-disabled="formLink"
-													ng-true-value="'Y'" ng-false-value="'N'"
-													ng-model="addController.significant"></td>
-											</tr>
+
 
 
 
 											<tr>
 												<td><label>Remarks:</label></td>
 												<td colspan="7"><textarea class="form-control"
-														style="width: 100%;" ng-disabled="formLink"
-														ng-model="addController.remarks" maxlength="255"></textarea></td>
+														style="width: 100%;overflow:auto;resize:none;text-transform: uppercase" ng-disabled="formLink"
+														ng-model="addController.remarks"
+														pattern="[A-Za-z0-9 !@#$%^&*()-_=+/ ~`,.]{1,150}"
+														title="special characters are not allowed" maxlength="250"></textarea></td>
 
 											</tr>
-
+											<tr>
+												<td><label>Apply Multiple Timing Codes
+														Individually :</label></td>
+												<td><input type="checkbox"
+													ng-disabled="editableMultipleTiming" ng-true-value="'Y'"
+													ng-false-value="'N'" ng-change="switchSelectionType()"
+													ng-model="addController.multipleTimingcodes"></td>
+											</tr>
 										</tbody>
 									</table>
 								</td>
 							</tr>
 						</tbody>
 					</table>
-					<!-- <hr> -->
+
 				</div>
 			</div>
 		</div>
-		<!-- <div class="row"> -->
+
 		<div class="col-lg-12">
 			<div class="panel panel-blue">
 				<div class="panel-heading">Included Serial Numbers</div>
@@ -293,8 +272,8 @@ label {
 								<tr>
 									<td style="width: 47%;"><select name="num" multiple
 										size="4" style="width: 100%;" ng-model="addController.fromSN"
-										ng-options="fsn for fsn in fromSN track by fsn" required
-										name="fromSerialNumber"
+										ng-options="fsn for fsn in fromSN | orderBy: fsn track by fsn "
+										name="fromSerialNumber" ng-disabled="formLink"
 										ng-change="disableTo(addController.fromSN)">
 											<option>select</option>
 											<option>select</option>
@@ -310,16 +289,13 @@ label {
 													<td>
 														<button type="button" class="btn btn-ge btn-width"
 															ng-click="addSN(addController.fromSN,addController.toSN)"
-															ng-disabled="formLink">Add</button>
+															ng-disabled="serialAddButtonLink">Add</button>
 													</td>
 												</tr>
 												<tr>
 													<td>
 														<button type="button" class="btn btn-ge btn-width"
-															ng-disabled="formLink" ng-click="clearSerialNo()">Clear</button>
-														<!-- <button id="save" style="background: url('../images/add_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button>
-                                  <br/>
-                                  <button id="save" style="background: url('../images/clear_off.gif');    background-size: initial;    width: 70px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button> -->
+															ng-disabled="serialClearButtonLink" ng-click="clearSerialNo()">Clear</button>
 													</td>
 												</tr>
 											</tbody>
@@ -327,7 +303,7 @@ label {
 									</td>
 									<td style="width: 47%;"><select name="num" size="4"
 										style="width: 100%;" ng-model="addController.toSN"
-										ng-options="tsn for tsn in toSN track by tsn"
+										ng-options="tsn for tsn in toSN | orderBy: tsn track by tsn"
 										ng-disabled="multiFromSerial">
 											<option>select</option>
 											<option>select</option>
@@ -343,11 +319,12 @@ label {
 
 
 					<div class="col-lg-6">
-						<!-- <div class="panel panel-default"><div class="panel-body">				  <div class="panel panel-default"><div class="panel-body">				   -->
+
 						<table class="table">
 							<tbody>
 								<tr>
 									<td><label>select</label></td>
+									<td><label>Timing code</label></td>
 									<td><label>From Serial#:</label></td>
 									<td><label>To Serial#:</label></td>
 
@@ -355,14 +332,15 @@ label {
 								</tr>
 								<tr ng-repeat="item in serialNumber">
 									<td><input type="checkbox" ng-model="item.isClicked"
-										ng-change="checkedIndex()"></td>
+										ng-change="checkedIndex(item)"></td>
+									<td>{{item.timing}}</td>
 									<td>{{item.fromSNum}}</td>
 									<td>{{item.toSNum}}</td>
 								</tr>
 								<tr>
 									<td colspan="3" style="border: none;">
 										<button id="delete" class="btn btn-ge btn-width" type="button"
-											ng-click="Delete($index)">Delete</button>
+											ng-click="removeItem($index)" ng-disabled="serialDeleteButtonLink">Delete</button>
 
 									</td>
 								</tr>
@@ -379,9 +357,6 @@ label {
 				<tbody>
 					<tr>
 						<td style="background-color: #fff; border: none;">
-							<!-- <button id="save" style="background: url('../images/save_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button>
-					<button id="clear" style="background: url('../images/clear_off.gif');    background-size: initial;    width: 70px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button>
-					<button id="close" style="background: url('../images/close_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button> -->
 							<button id="save" class="btn btn-ge btn-width" type="submit"
 								ng-disabled="formLink">Save</button>
 							<button id="clear" class="btn btn-ge btn-width"
@@ -389,7 +364,7 @@ label {
 								type="button">Clear</button>
 							<button id="cancel" class="btn btn-ge btn-width"
 								ng-disabled="formLink" type="button">
-								<a href="#/"> Cancel </a>
+								<a href="#welcome"> Cancel </a>
 							</button>
 						</td>
 					</tr>
@@ -400,22 +375,8 @@ label {
 	</form>
 
 	<!-- /.col-lg-4 -->
-	<div class="col-lg-12">
-		<!-- <div class="panel panel-success">
-                        <div class="panel-heading">
-                            Success Panel
-                        </div>
-                        <div class="panel-body">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
-                        </div> -->
-		<!--  <div class="panel-footer">
-                            Panel Footer
-                        </div> -->
-		<!-- </div> -->
-	</div>
-	<!-- /.col-lg-4 -->
-</div>
+	<div class="col-lg-12"></div>
 
-<!-- /.row -->
+</div>
 
 </html>

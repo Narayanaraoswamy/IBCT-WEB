@@ -1,0 +1,196 @@
+<html ng-app="ibct-web">
+<head>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+<script type="text/javascript"
+	src="../javascript/ui-bootstrap-tpls-2.3.1.min.js"></script>
+<script src="../javascript/ibct-angular.js"></script>
+
+  
+<style>
+.panel-body {
+	padding: 15px;
+}
+
+.table-border>tbody>tr>th {
+	padding: 12px;
+	border-top: 0px solid #ddd;
+	border: 3px solid #f2efeb;
+}
+
+.table-border>tbody>tr>td {
+	text-align: center;
+	border: 3px solid #f2efeb;
+}
+
+:disabled {
+	background-color: #CCD1D1;
+}
+</style>
+</head>
+<div class="row row-margin">
+	<div class="col-lg-12">
+		<!--  <h1 class="page-header">Dashboard</h1> -->
+
+	</div>
+	<!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row" ng-controller="viewConfigController">
+	<div class="col-lg-12">
+		<h3 style="font-weight: bolder; margin-left: 14px;">View Configuration</h3>
+		<p style="margin-left: 14px; font-size: 14px;">Please select
+			Product line and Product Type. Fields marked with asterisk (*) are
+			required.</p>
+	</div>
+<!-- 	<form name="updateBulletin"
+		ng-submit="updateExistingBulletin(viewConfigController.bulletinNumbers.bulletinStatus)"> -->
+		<div class="col-lg-12">
+			<div class="panel">
+			<!-- 	<div class="panel-heading" style="background-color: #F2EFEB;">
+					View Configuration</div> -->
+				<div class="panel-body">
+					<table style="">
+						<tbody>
+							<tr>
+							
+								<td style="width: 25%;"><label for="disabledSelect"><font
+										color="red">*</font>Product Line:</label></td>
+								<td style="width: 200px;"><select id="disabledSelect"
+									style="text-transform: uppercase;"
+									ng-model="viewConfigController.productLines"
+									ng-options="pl.productLine for pl in productLines track by pl.productLine"
+									ng-change="fillSerials()" class="form-control"><option
+											value="">select</option>
+								</select></td>
+
+								<td style="width: 25%;"><label for="disabledSelect"><font
+										color="red">*</font>Product Type:</label></td>
+								<td style="width: 200px;"><select id="disabledSelect"
+									style="text-transform: uppercase;"
+									ng-model="viewConfigController.productTypes"
+									ng-options="bl.productType for bl in productTypes track by bl.productType"
+									ng-change="fillSerials()" class="form-control" ><option
+											value="">select</option></select></td>
+								
+							</tr>
+							<tr>
+								<td style=""><label for="disabledSelect"><font
+										color="red">*</font>Product Serial#:</label></td>
+								<td style=""><select
+									style="width: 100%; text-transform: uppercase;"
+									ng-model="viewConfigController.serialNumber"
+									ng-change="asBuiltConfig()"
+									ng-options="bulletin.productSerialNum for bulletin in productSerials track by bulletin.productSerialNum"
+									class="form-control"><option value="">select</option></select>
+
+								</td>
+								
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<!-- </form> -->
+		
+					<div class="col-lg-12">
+			<div class="panel">
+				<div class="panel-heading" style="background-color: #F2EFEB;">
+					Product Details</div>
+				<div class="panel-body">
+					<table style="" width="50%">
+						<tbody>
+
+							<tr>
+								<td colspan="2"><label>Product Line:</label></td>
+								<td colspan="4">{{viewConfigController.productLines.productLine}}</td>
+							
+							
+								<td colspan="2"><label>Product Type:</label></td>
+								<td colspan="4">{{viewConfigController.productTypes.productType}}</td>
+								
+								
+							</tr>
+							<tr>
+								<td colspan="2"><label>Product Serial#:</label></td>
+								<td colspan="4">{{viewConfigController.serialNumber.productSerialNum}}</td>
+						
+								<td colspan="2"><label>Product Model:</label></td>
+								<td colspan="4">{{productModelId}}</td>
+							</tr>
+
+						</tbody>
+					</table>
+
+
+				</div>
+			</div>
+			
+		</div>
+		<div class="col-lg-12">
+			<div class="panel">
+				<div class="panel-heading" style="background-color: #F2EFEB;">
+					As Built Configuration</div>
+				<div class="panel-body">
+					<table class="table-border" style="width: 100%;">
+						<tbody>
+							<tr>
+								<th style=" text-align: center;">PPN</th>
+								<th style=" text-align: center;">Part#</th>
+								<th style=" text-align: center;">Part Serial#</th>
+								<th style=" text-align: center;">Quantity</th>
+								<th style=" text-align: center;">Nomenclature</th>
+								
+								
+							</tr>
+							<tr ng-model="ViewConfigData"
+								dir-paginate="product in viewConfigReport| itemsPerPage: pageSize">
+								
+								<td>{{product[0]}}</td>
+								<td>{{product[1]}}</td>
+								<td>{{product[2]}}</td>
+								<td>{{product[3]}}</td>
+								<td>{{product[4]}}</td>
+							</tr>
+
+						</tbody>
+					</table>
+
+
+				</div>
+			</div>
+		</div>
+			<div class="col-lg-6 pull-right" style="margin-bottom: 5px;">
+			<table style="background-color: #fff; border: none;">
+				<tbody>
+					<tr>
+						<td style="background-color: #fff; border: none;">
+							<button id="save" class="btn btn-ge btn-width" type="button"
+								ng-disabled="disableLink" ng-click="print()">Print</button>
+							<button id="clear" class="btn btn-ge btn-width"
+								ng-click="export()" ng-disabled="disableLink"
+								type="button">Export</button>
+							<button  class="btn btn-ge btn-width"
+								 type="button" ng-click="close()">
+								Close 
+							</button>
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+		</div>
+					
+		</div>
+		<div ng-controller="OtherController" class="other-controller">
+					
+					<div class="text-center">
+						<dir-pagination-controls boundary-links="true"
+							on-page-change="pageChangeHandler(newPageNumber)"
+							template-url="../template/dirPagination.tpl.html"></dir-pagination-controls>
+					</div>
+				</div>
+		</html>
+		

@@ -1,0 +1,71 @@
+<style>
+body {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #eee;
+}
+#page-wrapper{    background-color: #eee;    margin: 0px;}
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+  text-align: center;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+</style>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+<!-- <script type="text/javascript"
+	src="../javascript/ui-bootstrap-tpls-2.3.1.min.js"></script> -->
+	<link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container" ng-controller="loginController">
+
+      <form name="loginform" ng-submit="validate()">
+      <center>
+        <h2 class="form-signin-heading">IBCT Login</h2>
+        <label >Email address</label>
+        <input type="text"  class="form-control" ng-model="loginController.username" style="width:25%;"
+        placeholder="User Id" required="required" autofocus="">
+        <label >Password</label>
+        <input type="password"  class="form-control" placeholder="Password" style="width:25%;"
+        required="required" ng-model="loginController.pwd" >
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" style="width:25%;">Sign in</button>
+        </center>
+      </form>
+
+    </div>
+	
